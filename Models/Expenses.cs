@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ERManager.Models
 {
@@ -8,28 +8,46 @@ namespace ERManager.Models
         [Key]
         public int Id { get; set; } // Primary key
 
+        [StringLength(200)]
+        public string? Description { get; set; }
+
         [Required]
-        public int CategoryId { get; set; } // Foreign key to ExpensesCategory
+        [Range(0.01, double.MaxValue, ErrorMessage = "Amount must be greater than zero.")]
+        public decimal Amount { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        public DateTime UpdateAt { get; set; } = DateTime.Now;
+
+
+        [Required]
+        public int TreasuryId { get; set; }
+
+        [ForeignKey("TreasuryId")]
+        public virtual Treasury? Treasury { get; set; }
+
+        [Required]
+        public int CategoryId { get; set; }
 
         [ForeignKey("CategoryId")]
-        public required ExpensesCategory Category { get; set; } // Navigation property
+        public virtual ExpensesCategory? Category { get; set; }
+
         [Required]
         public int UserId { get; set; }
+
         [ForeignKey("UserId")]
-        public required User User { get; set; }
+        public virtual User? User { get; set; }
 
         [Required]
-        public int BranchId { get; set; } // Foreign key to Branch
+        public int BranchId { get; set; }
 
         [ForeignKey("BranchId")]
-        public required Branch Branch { get; set; } // Navigation property for Branch
-
-        [StringLength(200)]
-        public string? Description { get; set; } // Description of the expense
+        public virtual Branch? Branch { get; set; }
 
         [Required]
-        public decimal Amount { get; set; } // Amount of the expense
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdateAt { get; set; } = DateTime.Now;
+        public int CurrencyId { get; set; }
+
+        [ForeignKey("CurrencyId")]
+        public virtual Currency? Currency { get; set; }
     }
 }

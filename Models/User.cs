@@ -1,7 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace ERManager.Models
 {
+    public enum UserRole
+    {
+        Admin,
+        User,
+        Manager,
+        // Add other roles as needed
+    }
+
     public class User
     {
         [Key]
@@ -9,25 +18,25 @@ namespace ERManager.Models
 
         [Required]
         [StringLength(100)]
-        public string Username { get; set; } // Username for login
+        public required string Username { get; set; } // Unique username for the user
 
         [Required]
         [StringLength(100)]
-        public string Password { get; set; } // Password (consider using a hashed password in production)
+        [PasswordPropertyText]
+        public required string Password { get; set; } // Hashed password for authentication
 
         [Required]
-        [StringLength(50)]
-        public string Role { get; set; } // User role (e.g., Admin, User)
+        public UserRole Role { get; set; } // User role (using enum for type safety)
 
-        public DateTime CreatedAt { get; set; } = DateTime.Now; // Creation date
-        public DateTime UpdatedAt { get; set; } = DateTime.Now; // Last updated date
+        public DateTime CreatedAt { get; set; } = DateTime.Now; // Creation timestamp
+        public DateTime UpdatedAt { get; set; } = DateTime.Now; // Last update timestamp
 
-        // One-to-Many Relationship: A Contact can have multiple ContactPayments
+        // Navigation properties
         public ICollection<ContactPayment> ContactPayments { get; set; } = new List<ContactPayment>();
         public ICollection<Contact> Contacts { get; set; } = new List<Contact>();
         public ICollection<Expenses> Expenses { get; set; } = new List<Expenses>();
         public ICollection<MoneyTransaction> MoneyTransactions { get; set; } = new List<MoneyTransaction>();
-        public ICollection<Treasury> Treasury { get; set; } = new List<Treasury>();
+        public ICollection<Treasury> Treasuries { get; set; } = new List<Treasury>();
         public ICollection<TreasuryMoneyTransfer> TreasuryMoneyTransfers { get; set; } = new List<TreasuryMoneyTransfer>();
     }
 }

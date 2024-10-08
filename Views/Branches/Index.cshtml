@@ -1,55 +1,83 @@
 ﻿@model IEnumerable<ERManager.Models.Branch>
 
 @{
-    ViewData["Title"] = "Branches";
+    ViewData["Title"] = "Branches Index";
 }
 
 <h1>Branches</h1>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
-</p>
+<!-- Search Bar -->
+<div class="row mb-3">
+    <div class="col-md-4">
+        <input type="text" id="branchSearch" class="form-control" placeholder="Search Branches..." onkeyup="searchBranches()" />
+    </div>
+    <div class="col-md-2">
+        <a asp-action="Create" class="btn btn-primary">Create New</a>
+    </div>
+</div>
 
-<table class="table table-striped">
-    <thead>
+<!-- Table -->
+<table class="table table-bordered table-hover">
+    <thead class="thead-light">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Location)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().CreatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().UpdatedAt)
-            </th>
-            <th></th>
+            <th>@Html.DisplayNameFor(model => model.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.Location)</th>
+            <th>@Html.DisplayNameFor(model => model.CreatedAt)</th>
+            <th>@Html.DisplayNameFor(model => model.UpdatedAt)</th>
+            <th>@Html.DisplayNameFor(model => model.IsDefault)</th>
+            <th>Actions</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="branchTableBody">
         @foreach (var item in Model)
         {
             <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Location)</td>
+                <td>@Html.DisplayFor(modelItem => item.CreatedAt)</td>
+                <td>@Html.DisplayFor(modelItem => item.UpdatedAt)</td>
+                <td>@Html.DisplayFor(modelItem => item.IsDefault)</td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Location)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"))
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UpdatedAt.ToString("yyyy-MM-dd HH:mm:ss"))
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-info">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-success">Details</a>
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+
+                    <!-- Set as Default Button -->
+                    @if (!item.IsDefault)
+                    {
+                        <form asp-action="SetAsDefault" asp-route-id="@item.Id" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-warning">Set as Default</button>
+                        </form>
+                    }
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<!-- JavaScript for Search Functionality -->
+<script>
+    function searchBranches() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("branchSearch");
+        filter = input.value.toLowerCase();
+        table = document.getElementById("branchTableBody");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            tdName = tr[i].getElementsByTagName("td")[0];
+            tdLocation = tr[i].getElementsByTagName("td")[1];
+
+            if (tdName || tdLocation) {
+                txtValueName = tdName.textContent || tdName.innerText;
+                txtValueLocation = tdLocation.textContent || tdLocation.innerText;
+
+                if (txtValueName.toLowerCase().indexOf(filter) > -1 || txtValueLocation.toLowerCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>

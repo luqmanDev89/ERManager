@@ -1,10 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ERManager.Data;
+using ERManager.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ERManager.Data;
-using ERManager.Models;
 
 namespace ERManager.Controllers
 {
@@ -20,7 +17,7 @@ namespace ERManager.Controllers
         // GET: Branches
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Branch.ToListAsync());
+            return View(await _context.Branches.ToListAsync());
         }
 
         // GET: Branches/Details/5
@@ -31,7 +28,7 @@ namespace ERManager.Controllers
                 return NotFound();
             }
 
-            var branch = await _context.Branch
+            var branch = await _context.Branches
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (branch == null)
             {
@@ -48,23 +45,23 @@ namespace ERManager.Controllers
         }
 
         // POST: Branches/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Location")] Branch branch)
         {
             if (ModelState.IsValid)
             {
-                // Set CreatedAt and UpdatedAt here
-                branch.CreatedAt = DateTime.Now; // Set the current date and time
-                branch.UpdatedAt = DateTime.Now; // Set the current date and time
-
+                branch.CreatedAt = DateTime.Now;
+                branch.UpdatedAt = DateTime.Now;
+                branch.IsDefault = false;
                 _context.Add(branch);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(branch);
         }
-
 
         // GET: Branches/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -74,7 +71,7 @@ namespace ERManager.Controllers
                 return NotFound();
             }
 
-            var branch = await _context.Branch.FindAsync(id);
+            var branch = await _context.Branches.FindAsync(id);
             if (branch == null)
             {
                 return NotFound();
@@ -83,9 +80,11 @@ namespace ERManager.Controllers
         }
 
         // POST: Branches/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Location,CreatedAt,UpdatedAt")] Branch branch)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Location,CreatedAt,UpdatedAt,IsDefault")] Branch branch)
         {
             if (id != branch.Id)
             {
@@ -123,7 +122,7 @@ namespace ERManager.Controllers
                 return NotFound();
             }
 
-            var branch = await _context.Branch
+            var branch = await _context.Branches
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (branch == null)
             {
@@ -138,19 +137,50 @@ namespace ERManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var branch = await _context.Branch.FindAsync(id);
+            var branch = await _context.Branches.FindAsync(id);
             if (branch != null)
             {
-                _context.Branch.Remove(branch);
-                await _context.SaveChangesAsync();
+                _context.Branches.Remove(branch);
             }
 
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool BranchExists(int id)
         {
-            return _context.Branch.Any(e => e.Id == id);
+            return _context.Branches.Any(e => e.Id == id);
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> SetAsDefault(int id)
+        {
+            // Fetch all branches
+            var branches = await _context.Branches.ToListAsync();
+
+            // Find the selected branch
+            var selectedBranch = branches.FirstOrDefault(b => b.Id == id);
+            if (selectedBranch == null)
+            {
+                return NotFound();
+            }
+
+            // Set all branches' IsDefault to false
+            foreach (var branch in branches)
+            {
+                branch.IsDefault = false;
+            }
+
+            // Set the selected branch's IsDefault to true
+            selectedBranch.IsDefault = true;
+
+            // Save changes
+            await _context.SaveChangesAsync();
+
+            // Redirect back to the index page
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

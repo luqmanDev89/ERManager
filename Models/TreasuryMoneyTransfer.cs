@@ -1,36 +1,47 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ERManager.Models
 {
     public class TreasuryMoneyTransfer
     {
         [Key]
-        public int TransferId { get; set; } // Primary key
+        public int TransferId { get; set; } 
 
         [Required]
-        public int SourceTreasuryId { get; set; } // Foreign key to source treasury
+        public int SourceTreasuryId { get; set; }
+
+
+        public string? Notes { get; set; }
 
         [ForeignKey("SourceTreasuryId")]
-        public required Treasury SourceTreasury { get; set; } // Navigation property to the source treasury
+        public virtual Treasury? SourceTreasury { get; set; } 
 
         [Required]
-        public int DestinationTreasuryId { get; set; } // Foreign key to destination treasury
+        public int DestinationTreasuryId { get; set; } 
 
         [ForeignKey("DestinationTreasuryId")]
-        public required Treasury DestinationTreasury { get; set; } // Navigation property to the destination treasury
+        public virtual Treasury? DestinationTreasury { get; set; } 
 
         [Required]
-        public decimal Amount { get; set; } // Amount of money being transferred
+        [Range(0, double.MaxValue, ErrorMessage = "Amount must be non-negative.")]
+        public decimal Amount { get; set; } 
+
+        public DateTime CreatedAt { get; set; } = DateTime.Now; 
+        public DateTime UpdateAt { get; set; } = DateTime.Now; 
+
 
 
         [Required]
-        public int UserId { get; set; } // Foreign key to the User who initiates the transfer
+        public int UserId { get; set; } 
 
         [ForeignKey("UserId")]
-        public required User User { get; set; } // Navigation property to the User
+        public virtual User? User { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdateAt { get; set; } = DateTime.Now;
+        [Required]
+        public int CurrencyId { get; set; }
+
+        [ForeignKey("CurrencyId")]
+        public virtual Currency? Currency { get; set; } 
     }
 }

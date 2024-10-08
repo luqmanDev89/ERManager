@@ -1,0 +1,79 @@
+﻿@model ERManager.Models.ContactPayment
+
+<h4>ContactPayment</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Amount Input -->
+            <div class="form-group mb-3">
+                <label asp-for="Amount" class="form-label"></label>
+                <input asp-for="Amount" class="form-control" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+
+            <!-- Notes Input -->
+            <div class="form-group mb-3">
+                <label asp-for="Notes" class="form-label"></label>
+                <input asp-for="Notes" class="form-control" />
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+
+            <!-- PaymentType Dropdown -->
+            <div class="form-group mb-3">
+                <label asp-for="PaymentType" class="form-label"></label>
+                <select asp-for="PaymentType" asp-items="ViewBag.PaymentTypes" class="form-control select2"  ></select>
+                <span asp-validation-for="PaymentType" class="text-danger"></span>
+            </div>
+
+            <!-- CreatedAt Input (Read-only) -->
+            <div class="form-group mb-3">
+                <label asp-for="CreatedAt" class="form-label"></label>
+                <input asp-for="CreatedAt" class="form-control"  />
+                <span asp-validation-for="CreatedAt" class="text-danger"></span>
+            </div>
+
+            <!-- Contact Dropdown (Searchable) -->
+            <div class="form-group mb-3">
+                <label asp-for="ContactId" class="form-label">Contact</label>
+                <select asp-for="ContactId" class="form-control select2" asp-items="ViewBag.ContactId"></select>
+                <span asp-validation-for="ContactId" class="text-danger"></span>
+            </div>
+
+            <!-- Treasury Dropdown (Searchable) -->
+            <div class="form-group mb-3">
+                <label asp-for="TreasuryId" class="form-label">Treasury</label>
+                <select asp-for="TreasuryId" class="form-control select2" asp-items="ViewBag.TreasuryId"></select>
+                <span asp-validation-for="TreasuryId" class="text-danger"></span>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group mb-3">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+        <script>
+            $(document).ready(function () {
+                // Initialize Select2 on all dropdowns
+                $('.select2').select2({
+                    theme: 'bootstrap-5',  // Use Bootstrap 5 theme for Select2
+                    width: '100%'          // Ensure it takes full width
+                });
+            });
+        </script>
+}

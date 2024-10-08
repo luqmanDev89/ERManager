@@ -1,0 +1,120 @@
+﻿@model IEnumerable<ERManager.Models.ContactPayment>
+
+@{
+    ViewData["Title"] = "Contact Payments";
+}
+
+<div class="container mt-4">
+    <h1>@ViewData["Title"]</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <input type="text" id="paymentSearch" class="form-control" placeholder="Search Payments..." onkeyup="searchPayments()" />
+        </div>
+        <div class="col-md-3 offset-md-3 text-end">
+            <a asp-action="Create" class="btn btn-primary">Create New</a>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Amount)
+                        <input type="text" class="form-control form-control-sm" onkeyup="filterTable()" placeholder="Filter" />
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Notes)
+                        <input type="text" class="form-control form-control-sm" onkeyup="filterTable()" placeholder="Filter" />
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaymentType)
+                        <input type="text" class="form-control form-control-sm" onkeyup="filterTable()" placeholder="Filter" />
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreatedAt)
+                        <input type="text" class="form-control form-control-sm" onkeyup="filterTable()" placeholder="Filter" />
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UpdateAt)
+                        <input type="text" class="form-control form-control-sm" onkeyup="filterTable()" placeholder="Filter" />
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Currency)
+                        <input type="text" class="form-control form-control-sm" onkeyup="filterTable()" placeholder="Filter" />
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Contact)
+                        <input type="text" class="form-control form-control-sm" onkeyup="filterTable()" placeholder="Filter" />
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Treasury)
+                        <input type="text" class="form-control form-control-sm" onkeyup="filterTable()" placeholder="Filter" />
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.User)
+                        <input type="text" class="form-control form-control-sm" onkeyup="filterTable()" placeholder="Filter" />
+                    </th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="paymentTableBody">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Notes)</td>
+                        <td>@Html.DisplayFor(modelItem => item.PaymentType)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CreatedAt)</td>
+                        <td>@Html.DisplayFor(modelItem => item.UpdateAt)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Currency.Code)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Contact.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Treasury.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.User.Password)</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-info">Edit</a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-success">Details</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function filterTable() {
+        var table, tr, td, i, j, input, filter, shouldDisplay;
+        table = document.querySelector("table");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all rows of the table
+        for (i = 1; i < tr.length; i++) { // Start from 1 to skip the header row
+            tr[i].style.display = ""; // Reset the display property
+            shouldDisplay = false; // Initialize display flag for the row
+
+            // Loop through all columns
+            for (j = 0; j < tr[i].cells.length - 1; j++) { // Exclude the last column (Actions)
+                td = tr[i].cells[j];
+                input = tr[0].cells[j].getElementsByTagName("input")[0]; // Get the filter input for the column
+                if (input) {
+                    filter = input.value.toLowerCase();
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        // Check if the cell matches the filter
+                        if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                            shouldDisplay = true; // Set display flag
+                        }
+                    }
+                }
+            }
+
+            // Set display property based on flag
+            tr[i].style.display = shouldDisplay ? "" : "none";
+        }
+    }
+</script>
