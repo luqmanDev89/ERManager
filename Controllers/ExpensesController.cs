@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ERManager.Data;
+using ERManager.Models;
+using ERManager.ViewModels.Expenses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ERManager.Data;
-using ERManager.Models;
-using ERManager.ViewModels.Expenses;
 
 namespace ERManager.Controllers
 {
@@ -24,10 +20,33 @@ namespace ERManager.Controllers
         }
 
         // GET: Expenses
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string CategoryName, DateTime? startDate, DateTime? endDate,string? Description)
         {
-            var eRManagerContext = _context.Expenses.Include(e => e.Branch).Include(e => e.Category).Include(e => e.Currency).Include(e => e.Treasury).Include(e => e.User);
-            return View(await eRManagerContext.ToListAsync());
+            var expenses = _context.Expenses.Include(e => e.Category).Include(e => e.Branch).Include(e => e.User).AsQueryable();
+
+            if (!string.IsNullOrEmpty(CategoryName))
+            {
+                expenses = expenses.Where(e => e.Category.Name != null && e.Category.Name == CategoryName);
+            }
+            if (!string.IsNullOrEmpty(Description))
+            {
+                expenses = expenses.Where(e => e.Description != null && e.Description.Contains(Description));
+            }
+
+            if (startDate.HasValue && endDate.HasValue)
+            {
+                expenses = expenses.Where(e => e.CreatedAt >= startDate && e.CreatedAt <= endDate);
+            }
+
+            // Calculate the total amount of filtered expenses
+            var totalAmount = expenses.Select(e => (double)e.Amount).Sum();
+
+            ViewBag.TotalAmount = totalAmount;
+
+            // Pass categories to populate the Category filter dropdown
+            ViewBag.Categories = _context.ExpensesCategory.ToList();
+
+            return View(expenses.ToList());
         }
 
         // GET: Expenses/Details/5
@@ -83,7 +102,7 @@ namespace ERManager.Controllers
             {
                 try
                 {
-                    
+
 
                     var expense = new Expenses
                     {
@@ -93,8 +112,8 @@ namespace ERManager.Controllers
                         CategoryId = expensesViewModel.CategoryId,
                         UserId = _LogUserId,
                         BranchId = _BranchId,
-                        CurrencyId =_DefaultCurrencyId,
-                        CreatedAt = expensesViewModel.CreatedAt, 
+                        CurrencyId = _DefaultCurrencyId,
+                        CreatedAt = expensesViewModel.CreatedAt,
                         UpdateAt = DateTime.Now
                     };
 

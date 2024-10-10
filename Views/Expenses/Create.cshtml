@@ -4,87 +4,85 @@
     ViewData["Title"] = "Create Expense";
 }
 
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-<h1 class="my-3">Create Expense</h1>
-<h4 class="mb-4">Please fill in the details of the expense</h4>
-<hr />
+<div class="container-fluid">
 
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
-
-            <!-- Description -->
-            <div class="form-group mb-3">
-                <label asp-for="Description" class="control-label">تێبینی</label>
-                <input asp-for="Description" class="form-control" placeholder="Enter a brief description of the expense" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-
-            <!-- Amount -->
-            <div class="form-group mb-3">
-                <label asp-for="Amount" class="control-label">بڕ</label>
-                <input asp-for="Amount" class="form-control" placeholder="Enter the amount spent" />
-                <span asp-validation-for="Amount" class="text-danger"></span>
-            </div>
-
-           <!-- Created At -->
-            <div class="form-group mb-3">
-              <label asp-for="CreatedAt" class="control-label">بەروار</label>
-              <input asp-for="CreatedAt" class="form-control" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
-              <span asp-validation-for="CreatedAt" class="text-danger"></span>
-           </div>
-
-            <!-- Treasury Dropdown -->
-            <div class="form-group mb-3">
-                <label asp-for="TreasuryId" class="control-label">قاسە</label>
-                <select asp-for="TreasuryId" class="form-control select2" asp-items="ViewBag.TreasuryId"></select>
-                <span asp-validation-for="TreasuryId" class="text-danger"></span>
-            </div>
-
-            <!-- Category Dropdown -->
-            <div class="form-group mb-3">
-                <label asp-for="CategoryId" class="control-label">جۆر</label>
-                <select asp-for="CategoryId" class="form-control select2" asp-items="ViewBag.CategoryId"></select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="form-group mt-4">
-                <input type="submit" value="Create Expense" class="btn btn-primary btn-block" />
-            </div>
-        </form>
+    <!-- Page title box -->
+    <div class="page-title-box">
+        <ol class="breadcrumb float-right">
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Greeva</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Forms</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Back to List</a></li>
+            <li class="breadcrumb-item active">Create Expense</li>
+        </ol>
+        <h4 class="page-title">Create Expense</h4>
     </div>
-</div>
+    <!-- End page title box -->
 
-<div class="mt-3">
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-</div>
+
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card-box">
+                <h4 class="header-title m-t-0">Create Expense</h4>
+                <p class="text-muted font-14 m-b-20">
+                    Please fill in the details of the expense
+                </p>
+
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <!-- Description -->
+                    <div class="form-group mb-3">
+                        <label asp-for="Description" class="control-label font-16">تێبینی</label>
+                        <input asp-for="Description" class="form-control form-control-lg"
+                            placeholder="Enter a brief description of the expense" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <!-- Amount -->
+                    <div class="form-group mb-3">
+                        <label asp-for="Amount" class="control-label font-16">بڕ</label>
+                        <input asp-for="Amount" class="form-control form-control-lg" placeholder="Enter the amount spent" />
+                        <span asp-validation-for="Amount" class="text-danger"></span>
+                    </div>
+
+                    <!-- Created At -->
+                    <div class="form-group mb-3">
+                        <label asp-for="CreatedAt" class="control-label font-16">بەروار</label>
+                        <input asp-for="CreatedAt" class="form-control form-control-lg" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                        <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                    </div>
+
+                    <!-- Treasury Dropdown -->
+                    <div class="form-group mb-3">
+                        <label asp-for="TreasuryId" class="control-label font-16">قاسە</label>
+                        <select asp-for="TreasuryId" class="form-control form-control-lg select2"
+                            asp-items="ViewBag.TreasuryId"></select>
+                        <span asp-validation-for="TreasuryId" class="text-danger"></span>
+                    </div>
+
+                    <!-- Category Dropdown -->
+                    <div class="form-group mb-3">
+                        <label asp-for="CategoryId" class="control-label font-16">جۆر</label>
+                        <select asp-for="CategoryId" class="form-control form-control-lg select2"
+                            asp-items="ViewBag.CategoryId"></select>
+                        <span asp-validation-for="CategoryId" class="text-danger"></span>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-group mt-4">
+                        <input type="submit" value="Create Expense" class="btn btn-primary btn-block" />
+                    </div>
+                </form>
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+
+
+    </div>
+    <!-- end row -->
+
+</div> <!-- end container-fluid-->
 
 @section Scripts {
-    <!-- Include jQuery first -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-    <!-- Include Select2 JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-
-    <!-- Include Select2 CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-
-    <!-- Include Select2 Bootstrap theme -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-5-theme/1.2.2/select2-bootstrap-5.min.css" rel="stylesheet" />
-
-    <!-- Initialize Select2 -->
-    <script>
-        $(document).ready(function () {
-            $('.select2').select2({
-                theme: 'bootstrap-5',
-                width: '100%'
-            });
-        });
-    </script>
 }
-
-

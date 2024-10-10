@@ -1,9 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using ERManager.Data;
+﻿using ERManager.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ERManagerContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("ERManagerContext") ?? throw new InvalidOperationException("Connection string 'ERManagerContext' not found.")));
+
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ERManagerContext>();
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -20,10 +25,12 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.MapRazorPages();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "default",
