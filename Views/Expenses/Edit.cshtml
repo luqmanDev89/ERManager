@@ -4,14 +4,42 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<!-- Select2 -->
+<link rel="stylesheet" href="../../plugins/select2/css/select2.min.css">
+<link rel="stylesheet" href="../../plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 
-<h4>Expenses</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+
+<section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Expense Edit</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Expense Edit</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+<section class="content">
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">General</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                  <i class="fas fa-minus"></i></button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
@@ -31,27 +59,125 @@
            
             <div class="form-group">
                 <label asp-for="TreasuryId" class="control-label"></label>
-                <select asp-for="TreasuryId" class="form-control" asp-items="ViewBag.TreasuryId"></select>
+                <select asp-for="TreasuryId" class="form-control select2" asp-items="ViewBag.TreasuryId"></select>
                 <span asp-validation-for="TreasuryId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                <select asp-for="CategoryId" class="form-control select2" asp-items="ViewBag.CategoryId"></select>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
-           
-           
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
-        </form>
-    </div>
-</div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <div class="col-md-6">
+          <div class="card card-info">
+            <div class="card-header">
+              <h3 class="card-title">Files</h3>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                  <i class="fas fa-minus"></i></button>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>File Name</th>
+                    <th>File Size</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+                  <tr>
+                    <td>Functional-requirements.docx</td>
+                    <td>49.8005 kb</td>
+                    <td class="text-right py-0 align-middle">
+                      <div class="btn-group btn-group-sm">
+                        <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                        <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                      </div>
+                    </td>
+                  </tr><tr>
+                    <td>UAT.pdf</td>
+                    <td>28.4883 kb</td>
+                    <td class="text-right py-0 align-middle">
+                      <div class="btn-group btn-group-sm">
+                        <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                        <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                      </div>
+                    </td>
+                  </tr><tr>
+                    <td>Email-from-flatbal.mln</td>
+                    <td>57.9003 kb</td>
+                    <td class="text-right py-0 align-middle">
+                      <div class="btn-group btn-group-sm">
+                        <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                        <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                      </div>
+                    </td>
+                  </tr><tr>
+                    <td>Logo.png</td>
+                    <td>50.5190 kb</td>
+                    <td class="text-right py-0 align-middle">
+                      <div class="btn-group btn-group-sm">
+                        <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                        <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                      </div>
+                    </td>
+                  </tr><tr>
+                    <td>Contract-10_12_2014.docx</td>
+                    <td>44.9715 kb</td>
+                    <td class="text-right py-0 align-middle">
+                      <div class="btn-group btn-group-sm">
+                        <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                        <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                      </div>
+                    </td>
+
+                </tr></tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <a href="#" class="btn btn-secondary">Cancel</a>
+          <input type="submit" value="Save Changes" class="btn btn-success float-right">
+        </div>
+      </div>
+              </form>
+
+    </section>
+
+   
+
+  @section Scripts {
+
+    <!-- Select2 -->
+    <link rel="stylesheet" href="../../plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="../../plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <!-- Select2 -->
+    <script src="../../plugins/select2/js/select2.full.min.js"></script>
+
+    <!-- Initialize Select2 -->
+    <script>
+        $(document).ready(function () {
+            $('.select2').select2({
+                theme: 'bootstrap4',
+                width: '100%'
+            });
+        });
+    </script>
 }
+
+</div>
+
+

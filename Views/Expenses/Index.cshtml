@@ -1,83 +1,171 @@
 ﻿@model IEnumerable<ERManager.Models.Expenses>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Expenses";
 }
+    <link rel="stylesheet" href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Amount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdateAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Treasury)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Branch)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Currency)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdateAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Treasury.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Password)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Branch.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Currency.Code)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Expenses</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Expenses</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Expense </h3>
+                
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="row p-4 justify-end">
+                        <a asp-action="Create" class="btn btn-block btn-primary col-2">Create New</a>
+                    </div>
+                    <table id="example1" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Amount)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.CreatedAt)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.UpdateAt)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Treasury)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Category)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.User)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Branch)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Currency)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Amount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CreatedAt)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.UpdateAt)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Treasury.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Category.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.User.Password)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Branch.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Currency.Code)
+                                    </td>
+                                    <td class="project-actions text-right">
+                                        <a class="btn btn-primary btn-sm" asp-action="Details" asp-route-id="@item.Id">
+                                            <i class="fas fa-folder">
+                                            </i>
+                                            View
+                                        </a>
+                                        <a class="btn btn-info btn-sm" asp-action="Edit" asp-route-id="@item.Id">
+                                            <i class="fas fa-pencil-alt">
+                                            </i>
+                                            Edit
+                                        </a>
+                                        <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">
+                                            <i class="fas fa-trash">
+                                            </i>
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Rendering engine</th>
+                                <th>Browser</th>
+                                <th>Platform(s)</th>
+                                <th>Engine version</th>
+                                <th>CSS grade</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+
+
+@section Scripts {
+    <!-- Include jQuery first -->
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+    <!-- DataTables -->
+    <script src="~/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="~/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+
+
+    <script>
+        $(function () {
+            $("#example1").DataTable();
+            $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+            });
+        });
+    </script>
+
 }
-    </tbody>
-</table>
