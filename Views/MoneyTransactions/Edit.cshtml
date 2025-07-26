@@ -4,50 +4,85 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
 
-<h4>MoneyTransaction</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="TransactionId" />
-            <div class="form-group">
-                <label asp-for="Amount" class="control-label"></label>
-                <input asp-for="Amount" class="form-control" />
-                <span asp-validation-for="Amount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TransactionType" class="control-label"></label>
-                <select asp-for="TransactionType" asp-items="ViewBag.TransactionTypes" class="form-control"></select>
-                <span asp-validation-for="TransactionType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Notes" class="control-label"></label>
-                <input asp-for="Notes" class="form-control" />
-                <span asp-validation-for="Notes" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TreasuryId" class="control-label"></label>
-                <select asp-for="TreasuryId" class="form-control" asp-items="ViewBag.TreasuryId"></select>
-                <span asp-validation-for="TreasuryId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+
+<div class="container-fluid">
+    <!-- Page title box -->
+    <div class="page-title-box">
+        <ol class="breadcrumb float-right">
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Greeva</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Forms</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">لیست</a></li>
+            <li class="breadcrumb-item active">زیادکردنی باڵانس</li>
+        </ol>
+        <h4 class="page-title">زیادکردنی باڵانسی قاسە</h4>
     </div>
-</div>
+    <!-- End page title box -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card-box">
+                <h4 class="header-title m-t-0">کاڵا</h4>
+                <p class="text-muted font-14 m-b-20">
+                   زیادکردنی باڵانسی قاسە
+                </p>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    <input type="hidden" asp-for="TransactionId"/>
+
+                    <!-- Category Dropdown -->
+                    <div class="form-group mb-3">
+                        <label asp-for="TreasuryId" class="control-label font-16">@Html.DisplayNameFor(model => model.TreasuryId)</label>
+                        <select asp-for="TreasuryId" class="form-control form-control-lg select2"
+                            asp-items="ViewBag.TreasuryId"></select>
+                        <span asp-validation-for="TreasuryId" class="text-danger"></span>
+                    </div>
+
+                    <!-- Name -->
+                    <div class="form-group mb-3">
+                        <label asp-for="Amount" class="control-label font-16">@Html.DisplayNameFor(model => model.Amount)</label>
+                        <input asp-for="Amount" class="form-control form-control-lg"
+                            placeholder=" بڕ" />
+                        <span asp-validation-for="Amount" class="text-danger"></span>
+                    </div>
+
+                    <!-- Name -->
+                    <div class="form-group mb-3">
+                        <label asp-for="Notes" class="control-label font-16">@Html.DisplayNameFor(model => model.Notes)</label>
+                        <input asp-for="Notes" class="form-control form-control-lg"
+                            placeholder=" تێبینی" />
+                        <span asp-validation-for="Notes" class="text-danger"></span>
+                    </div>
+
+                   <!-- Created At -->
+                    <div class="form-group mb-3">
+                        <label asp-for="CreatedAt" class="control-label font-16">@Html.DisplayNameFor(model => model.CreatedAt)</label>
+                        <input asp-for="CreatedAt" class="form-control form-control-lg" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                        <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                    </div>
+                    
+                    <!-- Amount -->
+                    <div class="form-group mb-3">
+                        <input type="hidden" asp-for="TransactionType" class="form-control form-control-lg"  />
+                        <span asp-validation-for="TransactionType" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <input type="submit" value="زیادکردن" class="btn btn-lg btn-primary " />
+                        <a aps-aria="" asp-controller="MoneyTransactions" asp-action="Index"class="btn btn-lg btn-info "> گەڕانەوە</a>
+
+                    </div>
+
+
+                </form>
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+
+
+    </div>
+    <!-- end row -->
+</div> <!-- end container-fluid-->
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

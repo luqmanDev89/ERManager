@@ -1,0 +1,307 @@
+﻿@model IEnumerable<ERManager.Models.PurchaseInvoice>
+
+<div class="container-fluid">
+    <!-- Page Title -->
+    <div class="page-title-box d-flex align-items-center justify-content-between">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Greeva</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Tables</a></li>
+            <li class="breadcrumb-item active">پسوولەی کڕین</li>
+        </ol>
+        <h4 class="page-title">پسوولەی کڕین</h4>
+    </div>
+    <!-- End Page Title -->
+    <!-- Summary cards -->
+    <div class="row font-16">
+        <div class="col-md-3 mb-4">
+            <div class="card border-secondary shadow-sm" style="background-color: rgb(255, 255, 255);">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div class="text-left">
+                        <h5 class="card-title display-6 font-weight-bold mb-1">کۆی پسوولە</h5>
+                        <p class="card-text text-dark text-warning font-weight-bold display-5 mb-1">@Model.Sum(d => d.InvoiceItemsTotal).ToString("N0")</p>
+                        <p class="text-sm text-muted">Update Now</p>
+                    </div>
+                    <i class="mdi mdi-chart-areaspline" style="font-size: 2rem; color: #007bff;"></i>
+                </div>
+            </div> <!-- end card-box-->
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card border-secondary shadow-sm" style="background-color: rgb(255, 245, 220);">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div class="text-left">
+                        <h5 class="card-title display-6 font-weight-bold mb-1">کۆی مەسروف</h5>
+                        <p class="card-text text-dark text-warning font-weight-bold display-5 mb-1">@Model.Sum(d => d.Tax ?? 0).ToString("N0")</p>
+                        <p class="text-sm text-muted">Update Now</p>
+                    </div>
+                    <i class="fas fa-file-invoice" style="font-size: 2rem; color: #007bff;"></i>
+                </div>
+            </div> <!-- end card-box-->
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card border-secondary shadow-sm" style="background-color: rgb(220, 255, 220);">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div class="text-left">
+                        <h5 class="card-title display-6 font-weight-bold mb-1">تێکڕای داشکان</h5>
+                        <p class="card-text text-dark text-warning font-weight-bold display-5 mb-1">@Model.Sum(d => d.Discount ?? 0).ToString("N0")</p>
+                        <p class="text-sm text-muted">Update Now</p>
+                    </div>
+                    <i class="fas fa-percent" style="font-size: 2rem; color: #007bff;"></i>
+                </div>
+            </div> <!-- end card-box-->
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card border-secondary shadow-sm" style="background-color: rgb(220, 220, 255);">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div class="text-left">
+                        <h5 class="card-title display-6 font-weight-bold mb-1">کۆی گشتی</h5>
+                        <p class="card-text text-dark font-weight-bold display-5 mb-1">
+                            @Model.Sum(d => d.InvoiceTotal)
+                        </p>
+                        <p class="text-sm text-muted">Update Now</p>
+                    </div>
+                    <i class="fas fa-chart-line" style="font-size: 2rem; color: #007bff;"></i>
+                </div>
+            </div> <!-- end card-box-->
+        </div>
+    </div>
+    <!-- End summary cards -->
+    <!-- Items Table -->
+    <div class="col-12">
+        <div class="card-box">
+            <form method="get" id="filterForm">
+                <div class="row">
+                    <!-- Contact Name Filter -->
+                    <div class="col-md-2 col-sm-6">
+                        <label for="ContactId">بازرگان</label>
+                        <select id="ContactId" name="ContactId" class="form-control select2">
+                            <option value="">هەموو</option>
+                            @foreach (var contact in ViewBag.Contacts)
+                            {
+                                <option value="@contact.Id">@contact.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-1 col-sm-6">
+                        <label for="PurchaseInvoiceId">کۆدی پسوولە</label>
+                        <select id="PurchaseInvoiceId" name="PurchaseInvoiceId" class="form-control select2">
+                            <option value="">هەموو</option>
+                            @foreach (var items in ViewBag.PurchaseInvoiceId)
+                            {
+                                <option value="@items">@items</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Date Range Filters -->
+                    <div class="col-md-2 col-sm-6">
+                        <label for="StartDate">لە بەرواری</label>
+                        <input type="date" id="StartDate" name="startDate" value="@ViewBag.startDate?.ToString("yyyy-MM-dd")" class="form-control" />
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <label for="EndDate">بۆ بەرواری</label>
+                        <input type="date" id="EndDate" name="endDate" value="@ViewBag.endDate?.ToString("yyyy-MM-dd")" class="form-control" />
+                    </div>
+
+                    <!-- Notes Text Search -->
+                    <div class="col-md-2 col-sm-12">
+                        <label for="Notes">گەڕان</label>
+                        <input type="text" id="Notes" name="Notes" value="@ViewBag.Notes" placeholder="گەڕان لە تێبینی" class="form-control" />
+                    </div>
+
+                    <!-- Payment Status Filters -->
+                    <div class="col-md-2 col-sm-6">
+
+                        <br />
+                        <div class="custom-control custom-checkbox d-inline-block mr-3">
+                            <input type="checkbox" class="custom-control-input" id="IsPaid" name="IsPaid" value="true" @(ViewBag.IsPaid != null && ViewBag.IsPaid == true ? "checked" : "") />
+                            <label class="custom-control-label" for="IsPaid">واسڵکراو</label>
+                        </div>
+                        <div class="custom-control custom-checkbox d-inline-block">
+                            <input type="checkbox" class="custom-control-input" id="IsNotPaid" name="IsNotPaid" value="true" @(ViewBag.IsNotPaid != null && ViewBag.IsNotPaid == true ? "checked" : "") />
+                            <label class="custom-control-label" for="IsNotPaid">واسڵنەکراو</label>
+                        </div>
+                    </div>
+
+
+
+                    <!-- Filter Button -->
+                    <div class="col-md-1 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary form-control">گەڕان</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title m-0"><i class="fas fa-list-alt"></i> کاڵاکان</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped" id="purchase-items-table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>#</th>
+                                <th>بازرگان</th>
+                                <th>کاڵا</th>
+                                <th>بڕ</th>
+                                <th>نرخ</th>
+                                <th>کۆ</th>
+                                <th>گومرك</th>
+                                <th>بەروار</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var Invoices in Model)
+                            {
+                                // Check if IsNotPaid is true
+                                var isNotPaid = (bool?)ViewBag.IsNotPaid ?? null;
+                                var isPaid = (bool?)ViewBag.IsPaid ?? null;
+
+                                // Filter items based on ContactPaymentId when IsNotPaid is true
+                                var items = isNotPaid!=null&&isPaid==null
+                                ? Invoices.PurchaseInvoiceItems.Where(i => i.ContactPaymentId==null)
+                                : Invoices.PurchaseInvoiceItems;
+
+                                items = isPaid!=null&&isNotPaid==null
+                                ?items.Where(d=>d.ContactPaymentId!=null)
+                                : items;
+
+
+                                foreach (var item in items)
+                                { 
+
+
+                                    <tr data-id="@item.Id" class="invoice-row @(item.ContactPaymentId.HasValue ? "paid-invoice" : "")">
+                                        <td><a asp-controller="PurchaseInvoices" asp-action="Edit" asp-route-Id="@Invoices.Id">@Invoices.Id</a></td>
+                                        <td>@Invoices.Contact.Name</td>
+                                        <td>@item.Product?.Name</td>
+                                        <td class="editable" data-field="Quantity" contenteditable="true">@item.Quantity.ToString("N2")</td>
+                                        <td class="editable" data-field="UnitPrice" contenteditable="true">@item.UnitPrice.ToString("N2")</td>
+                                        <td>@item.LineTotal.ToString("N2")</td>
+                                        <td class="editable" data-field="TaxPresent" contenteditable="true">@item.TaxPresent.ToString("N2")</td>
+                                        <td>@Invoices.CreatedAt.Value.ToString("yyyy-MM-dd")</td>
+                                        <td>
+                                            <button class="btn btn-danger btn-sm" onclick="confirmDelete(@item.Id)"><i class="fas fa-trash"></i></button>
+                                            <button class="btn btn-warning btn-sm @(item.ContactPaymentId.HasValue ? "d-none" : "")" onclick="markAsPaid(@item.Id)">
+                                                <i class="fas fa-check"></i> پارەدان
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">سڕینەوە پشتڕاست بکەرەوە</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">ئایە دڵنیای لە سڕینەوەی ئەم کاڵایە؟</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ڕەتکردنەوە</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteButton">سڕینەوە</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+@section Scripts {
+    <script>
+        // Mark as Paid
+        function markAsPaid(invoiceId) {
+            if (confirm("ئایە دڵنیای لە پارەدانی ئەم کاڵایە؟")) {
+                $.post('/PurchaseInvoices/PayByInvoiceItemId', { Id: invoiceId })
+                    .done(function(response) {
+                        if (response.success) {
+                            alert("پارەدانەکە سەرکەوتووبوو");
+                            location.reload();
+                        } else {
+                            alert("هەڵە ڕوویدا لە پارەدان.");
+                        }
+                    })
+                    .fail(function() {
+                        alert("هەڵە ڕوویدا لە تایبەتمەندی پارەدان.");
+                    });
+            }
+        }
+
+        // Delete Item
+        let itemIdToDelete;
+        function confirmDelete(itemId) {
+            itemIdToDelete = itemId;
+            $('#confirmDeleteModal').modal('show');
+        }
+        $('#confirmDeleteButton').on('click', function () {
+            $.post('@Url.Action("DeleteItem")', { id: itemIdToDelete })
+                .done(function() {
+                    location.reload();
+                })
+                .fail(function(error) {
+                    alert("هەڵە ڕوویدا لە کاتی سڕینەوە: " + error.responseText);
+                });
+            $('#confirmDeleteModal').modal('hide');
+        });
+
+          $(document).ready(function () {
+            $('.editable').on('blur', function () {
+                var cell = $(this);
+                var row = cell.closest('tr');
+                var itemId = row.data('id');
+                var field = cell.data('field');
+                var newValue = cell.text().trim();
+
+                // Basic validation
+                if (field === 'Quantity') {
+                    // Check if newValue is a valid number and is a positive float
+                    if (isNaN(newValue) || parseFloat(newValue) <= 0) {
+                        alert('Quantity must be a positive number.');
+                        return;
+                    }
+                }
+                if (field === 'UnitPrice') {
+                    // Check if newValue is a valid number
+                    if (parseFloat(newValue) < 0) {
+                        alert('Unit Price must be a valid non-negative number.');
+                        return;
+                    }
+                }
+
+                // Make AJAX request to update the item
+                $.ajax({
+                    url: '@Url.Action("EditItem")', // Adjust the action name as necessary
+                    type: 'POST',
+                    data: {
+                        id: itemId,
+                        field: field,
+                        value: newValue
+                    },
+                    success: function (response) {
+                        // Refresh the entire page
+                        location.reload();
+                    },
+                    error: function (error) {
+                        alert('Error updating item: ' + error.responseText);
+                    }
+                });
+            });
+        });
+
+    </script>
+}

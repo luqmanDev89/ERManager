@@ -33,34 +33,34 @@ File: Main Css File
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 :root {
-  --blue: #188ae2;
-  --indigo: #4eb7eb;
-  --purple: #6b5eae;
-  --pink: #ff679b;
-  --red: #f34943;
-  --orange: #fd7e14;
-  --yellow: #fbcc5c;
-  --green: #31ce77;
-  --teal: #02a8b5;
-  --cyan: #35b8e0;
-  --white: #fff;
-  --gray: #98a6ad;
-  --gray-dark: #343a40;
-  --primary: #188ae2;
-  --secondary: #6c757d;
-  --success: #31ce77;
-  --info: #35b8e0;
-  --warning: #fbcc5c;
-  --danger: #f34943;
-  --light: #f3f6f8;
-  --dark: #3b3e47;
-  --breakpoint-xs: 0;
-  --breakpoint-sm: 576px;
-  --breakpoint-md: 768px;
-  --breakpoint-lg: 992px;
-  --breakpoint-xl: 1200px;
-  --font-family-sans-serif: "rudaw", sans-serif;
-  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --blue: #188ae2;
+    --indigo: #4eb7eb;
+    --purple: #6b5eae;
+    --pink: #ff679b;
+    --red: #f34943;
+    --orange: #fd7e14;
+    --yellow: #fbcc5c;
+    --green: #31ce77;
+    --teal: #02a8b5;
+    --cyan: #35b8e0;
+    --white: #fff;
+    --gray: #98a6ad;
+    --gray-dark: #343a40;
+    --primary: #188ae2;
+    --secondary: #6c757d;
+    --success: #31ce77;
+    --info: #35b8e0;
+    --warning: #fbcc5c;
+    --danger: #f34943;
+    --light: #f3f6f8;
+    --dark: #3b3e47;
+    --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: "rudaw","Amiri", sans-serif;
+    --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 
@@ -74,15 +74,23 @@ File: Main Css File
 
 @font-face {
   font-family: "rudaw";
-  src:url("fonts/rudawregular2.eot");
-  src:url("fonts/rudawregular2.eot?#iefix") format("embedded-opentype"),
-  url("fonts/rudawregular2.woff") format("woff"),
-  url("fonts/rudawregular2.ttf") format("truetype"),
-  url("fonts/rudawregular2.svg#rudawregular2") format("svg");
+  src: url("/assets/fonts/rudawregular2.eot");
+  src: url("/assets/fonts/rudawregular2.eot?#iefix") format("embedded-opentype"),
+       url("/assets/fonts/rudawregular2.woff") format("woff"),
+       url("/assets/fonts/rudawregular2.ttf") format("truetype"),
+       url("/assets/fonts/rudawregular2.svg#rudawregular2") format("svg");
   font-weight: normal;
   font-style: normal;
-
 }
+
+@font-face {
+    font-family: "Amiri";
+    src: url("/assets/fonts/Amiri-Bold.ttf");
+    
+    font-weight: normal;
+    font-style: normal;
+}
+
 
 html {
   font-family: "rudaw";
@@ -111,15 +119,97 @@ section {
 }
 
 body {
-  margin: 0;
-  font-family: "rudaw", sans-serif;
-  font-size: 0.875rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #6c757d;
-  text-align: left;
-  background-color: #f8f9fa;
+    margin: 0;
+    font-family:rudaw ,Amiri, sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #6c757d;
+    text-align: left;
+    background-color: #f8f9fa;
 }
+
+
+/*My code */
+
+@media print {
+    /* Ensure customer and invoice are displayed side by side when printing */
+    .row {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .col-md-6 {
+        width: 48%; /* Adjust the width for each side */
+        display: inline-block;
+        vertical-align: top;
+        margin-bottom: 10px;
+    }
+
+        /* Ensure proper alignment of the strong labels and their values */
+        .col-md-6 p strong {
+            display: inline-block;
+            width: 160px; /* Adjust the width for better alignment in print */
+        }
+
+    /* Styling for headings in print */
+    h5 {
+        font-size: 18px; /* Adjust the heading size for print */
+        margin-bottom: 15px;
+    }
+}
+
+
+
+.paid-invoice {
+    color: darkgreen; /* Light green background */
+    background-color:antiquewhite !important;
+}
+.hidebutton {
+    display: none !important;
+}
+
+
+.balance-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ff8c00; /* Orange color for the balance */
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+    margin-left: 10px; /* Space between icon and text */
+    
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 14px;
+    color: #333;
+}
+
+.text-orange {
+    color: #ff8c00; /* Orange color for balance */
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+
+
+
+/*End of my code*/
+
+
+
 
 [tabindex="-1"]:focus {
   outline: 0 !important;
@@ -249,7 +339,7 @@ pre,
 code,
 kbd,
 samp {
-  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas,"rudaw", "Liberation Mono", "Courier New", monospace;
   font-size: 1em;
 }
 
@@ -7318,45 +7408,86 @@ button.bg-dark:focus {
 }
 
 @media print {
-  .d-print-none {
-    display: none !important;
-  }
+    /* Hide elements not needed in print */
+    .d-print-none {
+        display: none !important;
+    }
 
-  .d-print-inline {
-    display: inline !important;
-  }
+    /* Display various types of elements */
+    .d-print-inline {
+        display: inline !important;
+    }
 
-  .d-print-inline-block {
-    display: inline-block !important;
-  }
+    .d-print-inline-block {
+        display: inline-block !important;
+    }
 
-  .d-print-block {
-    display: block !important;
-  }
+    .d-print-block {
+        display: block !important;
+    }
 
-  .d-print-table {
-    display: table !important;
-  }
+    .d-print-table {
+        display: table !important;
+    }
 
-  .d-print-table-row {
-    display: table-row !important;
-  }
+    .d-print-table-row {
+        display: table-row !important;
+    }
 
-  .d-print-table-cell {
-    display: table-cell !important;
-  }
+    .d-print-table-cell {
+        display: table-cell !important;
+    }
 
-  .d-print-flex {
-    display: -webkit-box !important;
-    display: -ms-flexbox !important;
-    display: flex !important;
-  }
+    .d-print-flex {
+        display: flex !important;
+    }
 
-  .d-print-inline-flex {
-    display: -webkit-inline-box !important;
-    display: -ms-inline-flexbox !important;
-    display: inline-flex !important;
-  }
+    .d-print-inline-flex {
+        display: inline-flex !important;
+    }
+
+    /* Ensure background colors are printed */
+    body {
+        -webkit-print-color-adjust: exact; /* Chrome */
+        color-adjust: exact; /* Firefox */
+        background-color: #fff; /* Set a default background color */
+    }
+
+    /* Background color for light elements */
+    .bg-light {
+        background-color: #f8f9fa !important; /* Adjust this to your desired color */
+    }
+
+    /* Table styling */
+    table {
+        width: 100%; /* Ensure tables take full width */
+        border-collapse: collapse; /* Combine table borders */
+        border-color:black !important;
+    }
+
+    th, td {
+        border: 1px solid #000; /* Add borders to table cells */
+        padding: 8px; /* Add some padding */
+        text-align: left; /* Align text to the left */
+    }
+
+    /* Ensure the header has a background color */
+    thead th {
+        background-color: #8c43ac !important; /* Ensure header has a background */
+        color: black !important; /* Ensure text color is visible */
+        -webkit-print-color-adjust: exact; /* Chrome */
+        color-adjust: exact; /* Firefox */
+    }
+
+    /* Ensure table rows keep background colors */
+    tr {
+        background-color: transparent; /* Default to transparent unless specified */
+    }
+
+        /* Apply specific background colors to rows if needed */
+        tr.bg-light {
+            background-color: #f8f9fa !important; /* Ensure rows with bg-light class are printed */
+        }
 }
 
 .embed-responsive {
@@ -10792,7 +10923,7 @@ body {
 }
 
 #sidebar-menu>ul>li>a {
-  color: #71798a;
+  color: black;
   display: block;
   padding: 14px 20px;
   margin: 2px 0;
@@ -12361,7 +12492,7 @@ button:focus {
 
   #topnav,
   .page-title-box,
-  .footer,
+  
   .left-side-menu {
     display: none;
     margin: 0;

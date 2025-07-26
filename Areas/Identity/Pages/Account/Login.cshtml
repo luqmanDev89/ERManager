@@ -1,0 +1,81 @@
+﻿@page
+@model LoginModel
+
+<body class="bg-account-pages">
+
+    <!-- Login -->
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="wrapper-page">
+                        <div class="account-pages">
+                            <div class="account-box">
+
+                                <!-- Logo box -->
+                                <div class="account-logo-box d-flex justify-content-center align-items-center" style="height: 100px;">
+                                    <h2 class="text-uppercase text-center m-0" style="line-height: 35px;">
+                                        <a href="https://www.facebook.com/Luqman.Amen" class="text-success d-flex align-items-center text-decoration-none">
+                                            <span class="logo-text me-2" style="font-size: 1.5rem; font-weight: bold;">LuqmanTech</span>
+                                            <img src="~/assets/images/LuqmanTechLogo.png" alt="Logo" height="35">
+                                        </a>
+                                    </h2>
+                                </div>
+
+
+                                <div class="account-content">
+                                    <form id="account" method="post">
+                                        @Html.AntiForgeryToken()
+
+                                        <!-- Validation Summary -->
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                                        <!-- Branch Selection -->
+                                        <div class="form-group">
+                                            <label asp-for="Input.SelectedBranchId">لق دیاری بکە</label>
+                                            <select asp-for="Input.SelectedBranchId" asp-items="@(new SelectList(Model.AvailableBranches, "Id", "Name"))" class="form-control" required>
+                                                <option value="">-- Select Branch --</option>
+                                            </select>
+                                            <span asp-validation-for="Input.SelectedBranchId" class="text-danger"></span>
+                                        </div>
+
+                                        <!-- Username -->
+                                        <div class="form-group mb-3">
+                                            <label asp-for="Input.Username" class="form-label">ناو/ئیمەیڵ</label>
+                                            <input asp-for="Input.Username" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" required />
+                                            <span asp-validation-for="Input.Username" class="text-danger"></span>
+                                        </div>
+
+                                        <!-- Password -->
+                                        <div class="form-group mb-3">
+                                            <label asp-for="Input.Password" class="form-label">ووشەی نهێنی</label>
+                                            <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" required />
+                                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                            <a href="~/Identity/Account/ForgotPassword" class="text-muted float-right"><small>Forgot your password?</small></a>
+                                        </div>
+
+                                        <!-- Submit Button -->
+                                        <div class="form-group row text-center">
+                                            <div class="col-12">
+                                                <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-success" aria-label="Login">چوونە ژورەوە</button>
+                                            </div>
+                                        </div>
+                                    </form> <!-- end form -->
+                                </div> <!-- end account-content -->
+
+                            </div> <!-- end account-box -->
+                        </div>
+                        <!-- end account-page-->
+                    </div>
+                    <!-- end wrapper-page -->
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    </section>
+    <!-- END HOME -->
+
+</body>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

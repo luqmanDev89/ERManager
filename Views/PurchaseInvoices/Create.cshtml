@@ -1,0 +1,51 @@
+﻿@model ERManager.Models.PurchaseInvoice
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<div class="container-fluid">
+
+    <!-- Page title box -->
+    <div class="page-title-box">
+        <ol class="breadcrumb float-right">
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Greeva</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Tables</a></li>
+            <li class="breadcrumb-item active">Purchase Invoice</li>
+        </ol>
+        <h4 class="page-title">Create Purchase Invoice</h4>
+    </div>
+    <!-- End page title box -->
+
+    <div class="row font-16">
+        <div class="col-6">
+            <div class="card-box">
+                <!-- Form Start -->
+                <form asp-action="Create">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="ContactId" class="control-label"></label>
+                        <select asp-for="ContactId" class="select2 form-control" asp-items="ViewBag.ContactId"></select>
+                    </div>
+                    <!-- Created At -->
+                    <div class="form-group">
+                        <label asp-for="CreatedAt" class="control-label font-16">@Html.DisplayNameFor(model => model.CreatedAt)</label>
+                        <input asp-for="CreatedAt" class="form-control form-control-lg" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                        <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                    </div>
+
+                  
+                    <div class="form-group">
+                        <input type="submit" value="زیادکردن" class="btn btn-primary" />
+                        <a asp-action="Index" class="btn btn-primary">گەڕانەوە</a>
+                    </div>
+                </form>
+                <!-- Form End -->
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+    </div>
+    <!-- end row -->
+
+</div> <!-- end container-fluid -->

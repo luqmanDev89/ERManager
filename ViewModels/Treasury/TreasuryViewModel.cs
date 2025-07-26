@@ -9,7 +9,7 @@ namespace ERManager.ViewModels.Treasury
         [StringLength(100)]
         public required string Name { get; set; }
 
-        public string? Description { get; set; }
+        public string? Notes { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }

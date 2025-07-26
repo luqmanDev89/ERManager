@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ERManager.Models
@@ -8,42 +9,81 @@ namespace ERManager.Models
         Inflow,   // Money received
         Outflow   // Money paid out
     }
+
     public class ContactPayment
     {
         [Key]
-        public int Id { get; set; }  
-        [Required]
-        public decimal Amount { get; set; } 
+        [DisplayName("کۆد")]
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "تکایە بڕی پارە داخل بکە")]
+        [DisplayName("بڕ")]
+        public double Amount { get; set; }
+
         [StringLength(500)]
+        [DisplayName("تێبینی")]
+        [DataType(DataType.MultilineText)]
         public string? Notes { get; set; }
+
         [Required]
+        [DefaultValue(PaymentType.Inflow)]
+        [DisplayName("جۆر")]
         public PaymentType PaymentType { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdateAt { get; set; } = DateTime.Now;
-
 
         [Required]
-        public int CurrencyId { get; set; } 
+        [DisplayName("دروستکردن")]
+        [DataType(DataType.DateTime)]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [Required]
+        [DisplayName("نوێکردنەوە")]
+        [DataType(DataType.DateTime)]
+        public DateTime UpdateAt { get; set; } = DateTime.UtcNow;
+
+        [DisplayName("کۆدی پسوولە")]
+        public int? PurchaseInvoiceId { get; set; }
+
+        [ForeignKey("PurchaseInvoiceId")]
+        public virtual PurchaseInvoice? PurchaseInvoice { get; set; }
+
+        [DisplayName("کۆدی پسوولە")]
+        public int? PurchaseInvoiceItemId { get; set; }
+
+        [ForeignKey("PurchaseInvoiceItemId")]
+        public virtual PurchaseInvoiceItem? PurchaseInvoiceItem { get; set; }
+
+        [DisplayName("کۆدی پسوولە")]
+        public int? SaleInvoiceId { get; set; }
+
+        [ForeignKey("SaleInvoiceId")]
+        public virtual SaleInvoice? SaleInvoice { get; set; }
+
+        [Required]
+        [DisplayName("جۆری دراو")]
+        public int CurrencyId { get; set; }
+
         [ForeignKey("CurrencyId")]
-        public virtual Currency? Currency { get; set; } 
+        public virtual Currency? Currency { get; set; }
 
-        [Required]
-        public int ContactId { get; set; } 
+        [Required(ErrorMessage = "تکایە بازرگان دیاری بکە")]
+        [DisplayName("بازرگان")]
+        public int ContactId { get; set; }
 
         [ForeignKey("ContactId")]
-        public virtual Contact? Contact { get; set; }  
+        public virtual Contact? Contact { get; set; }
 
-        [Required]
-        public int TreasuryId { get; set; } 
+        [Required(ErrorMessage = "تکایە قاسە دیاری بکە")]
+        [DisplayName("قاسە")]
+        public int TreasuryId { get; set; }
 
         [ForeignKey("TreasuryId")]
-        public virtual Treasury? Treasury { get; set; }  
+        public virtual Treasury? Treasury { get; set; }
 
         [Required]
-        public int UserId { get; set; }  
+        [DisplayName("بەکارهێنەر")]
+        public string UserId { get; set; }
 
         [ForeignKey("UserId")]
-        public virtual User? User { get; set; }  
-
+        public virtual User? User { get; set; }
     }
 }

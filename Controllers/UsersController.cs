@@ -1,139 +1,150 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ERManager.Models;
+using ERManager.ViewModels.User;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ERManager.Data;
-using ERManager.Models;
 
 namespace ERManager.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
-        private readonly ERManagerContext _context;
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UsersController(ERManagerContext context)
+        public UsersController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
-            _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         // GET: Users
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Users.ToListAsync());
-        }
-
-        // GET: Users/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
+            var users = _userManager.Users.ToList();
+            return View(users);
         }
 
         // GET: Users/Create
-        public IActionResult Create()
-        { // Create a select list for UserRole
-            ViewBag.Roles = Enum.GetValues(typeof(UserRole)).Cast<UserRole>()
-                .Select(r => new
-                {
-                    Id = r,
-                    Name = r.ToString() // Convert enum to string for display
-                }).ToList();
-
+        public async Task<IActionResult> Create()
+        {
+            ViewBag.Roles = _roleManager.Roles.Select(r => r.Name).ToList();
             return View();
         }
 
         // POST: Users/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Username,Password,Role,CreatedAt")] User user)
+        public async Task<IActionResult> Create(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                user.UpdatedAt = DateTime.Now;
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var user = new User { UserName = model.UserName, Email = model.Email, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now };
+                var result = await _userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    if (!string.IsNullOrEmpty(model.Role) && await _roleManager.RoleExistsAsync(model.Role))
+                    {
+                        await _userManager.AddToRoleAsync(user, model.Role);
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
             }
-            return View(user);
+
+            ViewBag.Roles = _roleManager.Roles.Select(r => r.Name).ToList();
+            return View(model);
         }
 
         // GET: Users/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string id)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(id))
             {
                 return NotFound();
             }
 
-            var user = await _context.Users.FindAsync(id);
+            var user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
-            return View(user);
-        }
 
-        // POST: Users/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+            var model = new EditUserViewModel
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                Role = (await _userManager.GetRolesAsync(user)).FirstOrDefault()
+            };
+
+            ViewBag.Roles = _roleManager.Roles.Select(r => r.Name).ToList();
+            return View(model);
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Username,Password,Role,CreatedAt,UpdatedAt")] User user)
+        public async Task<IActionResult> Edit(EditUserViewModel model)
         {
-            if (id != user.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
+                var user = await _userManager.FindByIdAsync(model.Id);
+                if (user == null)
                 {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+
+                user.UserName = model.UserName;
+                user.Email = model.Email;
+                user.UpdatedAt = DateTime.Now;
+
+                if (!string.IsNullOrEmpty(model.NewPassword))
                 {
-                    if (!UserExists(user.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    var passwordHasher = _userManager.PasswordHasher;
+                    user.PasswordHash = passwordHasher.HashPassword(user, model.NewPassword);
                 }
-                return RedirectToAction(nameof(Index));
+
+                var userRoles = await _userManager.GetRolesAsync(user);
+                if (!string.IsNullOrEmpty(model.Role) && userRoles.FirstOrDefault() != model.Role)
+                {
+                    if (!string.IsNullOrEmpty(userRoles.FirstOrDefault()))
+                    {
+                        await _userManager.RemoveFromRoleAsync(user, userRoles.FirstOrDefault());
+                    }
+                    await _userManager.AddToRoleAsync(user, model.Role);
+                }
+
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
             }
-            return View(user);
+
+            ViewBag.Roles = _roleManager.Roles.Select(r => r.Name).ToList();
+            return View(model);
         }
 
+
+
         // GET: Users/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string id)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(id))
             {
                 return NotFound();
             }
 
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -145,21 +156,32 @@ namespace ERManager.Controllers
         // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user != null)
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
             {
-                _context.Users.Remove(user);
+                return NotFound();
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var result = await _userManager.DeleteAsync(user);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Add detailed error messages from IdentityResult to ModelState
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            TempData["ErrorMessage"] = "An error occurred while trying to delete the user.";
+
+            // Redirect to an error page or return the user view with error messages
+            return RedirectToAction("Error", "Home");
         }
 
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.Id == id);
-        }
     }
 }

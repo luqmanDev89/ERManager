@@ -1,61 +1,58 @@
 ﻿@model ERManager.ViewModels.Expenses.ExpensesViewModel
-
+@using System.ComponentModel;
 @{
-    ViewData["Title"] = "Create Expense";
+    ViewData["Title"] = "زیادکردنی مەسروف";
 }
 
 
 <div class="container-fluid">
-
     <!-- Page title box -->
     <div class="page-title-box">
         <ol class="breadcrumb float-right">
             <li class="breadcrumb-item"><a href="javascript:void(0);">Greeva</a></li>
             <li class="breadcrumb-item"><a href="javascript:void(0);">Forms</a></li>
-            <li class="breadcrumb-item"><a asp-action="Index">Back to List</a></li>
-            <li class="breadcrumb-item active">Create Expense</li>
+            <li class="breadcrumb-item"><a asp-action="Index">لیست</a></li>
+            <li class="breadcrumb-item active">زیادکردنی مەسروف</li>
         </ol>
-        <h4 class="page-title">Create Expense</h4>
+        <h4 class="page-title">زیادکردنی مەسروف</h4>
     </div>
     <!-- End page title box -->
-
-
     <div class="row">
         <div class="col-lg-8 mx-auto">
             <div class="card-box">
-                <h4 class="header-title m-t-0">Create Expense</h4>
+                <h4 class="header-title m-t-0">مەسروف</h4>
                 <p class="text-muted font-14 m-b-20">
-                    Please fill in the details of the expense
+                   زیادکردنی مەسروف
                 </p>
 
                 <form asp-action="Create">
                     <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-                    <!-- Description -->
+                    <!-- Notes -->
                     <div class="form-group mb-3">
-                        <label asp-for="Description" class="control-label font-16">تێبینی</label>
-                        <input asp-for="Description" class="form-control form-control-lg"
-                            placeholder="Enter a brief description of the expense" />
-                        <span asp-validation-for="Description" class="text-danger"></span>
+                        <label asp-for="Notes" class="control-label font-16">@Html.DisplayNameFor(model => model.Notes)</label>
+                        <input asp-for="Notes" class="form-control form-control-lg"
+                            placeholder="تێبینی" />
+                        <span asp-validation-for="Notes" class="text-danger"></span>
                     </div>
 
                     <!-- Amount -->
                     <div class="form-group mb-3">
-                        <label asp-for="Amount" class="control-label font-16">بڕ</label>
-                        <input asp-for="Amount" class="form-control form-control-lg" placeholder="Enter the amount spent" />
+                        <label asp-for="Amount" class="control-label font-16">@Html.DisplayNameFor(model => model.Amount)</label>
+                        <input asp-for="Amount" class="form-control form-control-lg" placeholder="بڕی مەسروف" />
                         <span asp-validation-for="Amount" class="text-danger"></span>
                     </div>
 
                     <!-- Created At -->
                     <div class="form-group mb-3">
-                        <label asp-for="CreatedAt" class="control-label font-16">بەروار</label>
+                        <label asp-for="CreatedAt" class="control-label font-16">@Html.DisplayNameFor(model => model.CreatedAt)</label>
                         <input asp-for="CreatedAt" class="form-control form-control-lg" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
                         <span asp-validation-for="CreatedAt" class="text-danger"></span>
                     </div>
 
                     <!-- Treasury Dropdown -->
                     <div class="form-group mb-3">
-                        <label asp-for="TreasuryId" class="control-label font-16">قاسە</label>
+                        <label asp-for="TreasuryId" class="control-label font-16">@Html.DisplayNameFor(model => model.TreasuryId)</label>
                         <select asp-for="TreasuryId" class="form-control form-control-lg select2"
                             asp-items="ViewBag.TreasuryId"></select>
                         <span asp-validation-for="TreasuryId" class="text-danger"></span>
@@ -63,7 +60,7 @@
 
                     <!-- Category Dropdown -->
                     <div class="form-group mb-3">
-                        <label asp-for="CategoryId" class="control-label font-16">جۆر</label>
+                        <label asp-for="CategoryId" class="control-label font-16">@Html.DisplayNameFor(model => model.CategoryId)</label>
                         <select asp-for="CategoryId" class="form-control form-control-lg select2"
                             asp-items="ViewBag.CategoryId"></select>
                         <span asp-validation-for="CategoryId" class="text-danger"></span>
@@ -80,7 +77,6 @@
 
     </div>
     <!-- end row -->
-
 </div> <!-- end container-fluid-->
 
 @section Scripts {

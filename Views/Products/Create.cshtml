@@ -4,53 +4,89 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
 
-<h4>Product</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BuyingPrice" class="control-label"></label>
-                <input asp-for="BuyingPrice" class="form-control" />
-                <span asp-validation-for="BuyingPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SellingPrice" class="control-label"></label>
-                <input asp-for="SellingPrice" class="form-control" />
-                <span asp-validation-for="SellingPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Barcode" class="control-label"></label>
-                <input asp-for="Barcode" class="form-control" />
-                <span asp-validation-for="Barcode" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProductCategoryId" class="control-label"></label>
-                <select asp-for="ProductCategoryId" class ="form-control" asp-items="ViewBag.ProductCategoryId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+
+<div class="container-fluid">
+    <!-- Page title box -->
+    <div class="page-title-box">
+        <ol class="breadcrumb float-right">
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Greeva</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Forms</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">لیست</a></li>
+            <li class="breadcrumb-item active">زیادکردنی کاڵا</li>
+        </ol>
+        <h4 class="page-title">زیادکردنی کاڵا</h4>
     </div>
-</div>
+    <!-- End page title box -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card-box">
+                <h4 class="header-title m-t-0">کاڵا</h4>
+                <p class="text-muted font-14 m-b-20">
+                   زیادکردنی کاڵا
+                </p>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <!-- Category Dropdown -->
+                    <div class="form-group mb-3">
+                        <label asp-for="ProductCategoryId" class="control-label font-16">@Html.DisplayNameFor(model => model.ProductCategory)</label>
+                        <select asp-for="ProductCategoryId" class="form-control form-control-lg select2"
+                            asp-items="ViewBag.categories"></select>
+                        <span asp-validation-for="ProductCategoryId" class="text-danger"></span>
+                    </div>
+
+                    <!-- Name -->
+                    <div class="form-group mb-3">
+                        <label asp-for="Barcode" class="control-label font-16">@Html.DisplayNameFor(model => model.Barcode)</label>
+                        <input asp-for="Barcode" class="form-control form-control-lg"
+                            placeholder=" بارکۆد" />
+                        <span asp-validation-for="Barcode" class="text-danger"></span>
+                    </div>
+
+                    <!-- Name -->
+                    <div class="form-group mb-3">
+                        <label asp-for="Name" class="control-label font-16">@Html.DisplayNameFor(model => model.Name)</label>
+                        <input asp-for="Name" class="form-control form-control-lg"
+                            placeholder="ناوی کاڵا" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <!-- Amount -->
+                    <div class="form-group mb-3">
+                        <label asp-for="BuyingPrice" class="control-label font-16">@Html.DisplayNameFor(model => model.BuyingPrice)</label>
+                        <input asp-for="BuyingPrice" class="form-control form-control-lg" placeholder=" نرخی کڕین" />
+                        <span asp-validation-for="BuyingPrice" class="text-danger"></span>
+                    </div>
+
+                    <!-- Created At -->
+                    <div class="form-group mb-3">
+                        <label asp-for="SellingPrice" class="control-label font-16">@Html.DisplayNameFor(model => model.SellingPrice)</label>
+                        <input asp-for="SellingPrice" class="form-control form-control-lg" placeholder=" نرخی فڕۆشتن" />
+                        <span asp-validation-for="SellingPrice" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
+                        </label>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <input type="submit" value="زیادکردن" class="btn btn-lg btn-primary " />
+                        <a aps-aria="" asp-controller="Products" asp-action="Index"class="btn btn-lg btn-info "> گەڕانەوە</a>
+
+                    </div>
+                </form>
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+
+
+    </div>
+    <!-- end row -->
+</div> <!-- end container-fluid-->
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

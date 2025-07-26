@@ -1,41 +1,52 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 namespace ERManager.Models
 {
     public class Treasury
     {
         [Key]
-        public int TreasuryId { get; set; } // Primary key
+        [DisplayName("کۆد")]
+        public int TreasuryId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "تکایە ناو بنووسە")]
         [StringLength(100)]
-        public required string Name { get; set; } // Name of the treasury
+        [DisplayName("ناو")]
+        public required string Name { get; set; }
 
         [StringLength(500)]
-        public string? Description { get; set; } // Optional description
+        [DisplayName("تێبینی")]
+        [DataType(DataType.MultilineText)]
+        public string? Notes { get; set; } = string.Empty;
 
-        public DateTime CreatedAt { get; set; } = DateTime.Now; // Creation date
-        public DateTime UpdateAt { get; set; } = DateTime.Now; // Last updated date
+        [DisplayName("دروستکردن")]
+        [DataType(DataType.DateTime)]
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
+        [DisplayName("نوێکردنەوە")]
+        [DataType(DataType.DateTime)]
+        public DateTime UpdateAt { get; set; } = DateTime.Now;
 
         [Required]
-        public int UserId { get; set; } // User managing the treasury
+        [DisplayName("بەکارهێنەر")]
+        public string UserId { get; set; }
 
-        [ForeignKey("UserId")]
-        public virtual User? User { get; set; } // User associated with the treasury
+        [ForeignKey(nameof(UserId))]
+        [DisplayName("بەکارهێنەر")]
+        public virtual User? User { get; set; }
 
         [Required]
-        public int BranchId { get; set; } // Branch associated with the treasury
+        [DisplayName("لق")]
+        public int BranchId { get; set; }
 
-        [ForeignKey("BranchId")]
-        public virtual Branch? Branch { get; set; } // Branch associated with the treasury
-
+        [ForeignKey(nameof(BranchId))]
+        [DisplayName("لق")]
+        public virtual Branch? Branch { get; set; }
 
         public ICollection<MoneyTransaction> MoneyTransactions { get; set; } = new List<MoneyTransaction>(); // Related money transactions
         public ICollection<ContactPayment> ContactPayments { get; set; } = new List<ContactPayment>(); // Related contact payments
         public ICollection<Expenses> Expenses { get; set; } = new List<Expenses>(); // Related expenses
-                                                                                    // Navigation properties for TreasuryMoneyTransfer
+
         public virtual ICollection<TreasuryMoneyTransfer> TreasuryMoneyTransfersAsSource { get; set; } = new List<TreasuryMoneyTransfer>();
         public virtual ICollection<TreasuryMoneyTransfer> TreasuryMoneyTransfersAsDestination { get; set; } = new List<TreasuryMoneyTransfer>();
     }

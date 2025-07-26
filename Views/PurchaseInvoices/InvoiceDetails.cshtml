@@ -1,0 +1,216 @@
+﻿@model ERManager.Models.PurchaseInvoice
+
+<div class="container-fluid">
+    <!-- Page Title -->
+    <div class="page-title-box d-flex align-items-center justify-content-between">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Greeva</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Tables</a></li>
+            <li class="breadcrumb-item active">پسوولەی کڕین</li>
+        </ol>
+        <h4 class="page-title">پسوولەی کڕین</h4>
+    </div>
+    <!-- End Page Title -->
+
+    <div class="row mb-4">
+        <!-- Invoice Details -->
+        <div class="col-12 mb-4">
+            <div class="card shadow-sm border-primary">
+                <div class="card-header text-primary">
+                    <h5 class="card-title m-0"><i class="fas fa-file-invoice fa-lg"></i> پسوولە</h5>
+                </div>
+                <div class="card-body" style="padding: 20px;">
+                    <div class="row">
+                        <!-- Left Column -->
+                        <div class="col-md-6">
+                            <p style="font-size: 1.2em; margin-bottom: 15px;">
+                                <strong><i class="fas fa-id-badge fa-lg"></i> کۆد:</strong>
+                                <span class="text-muted">@Model.Id</span>
+                            </p>
+                            <p style="font-size: 1.2em; margin-bottom: 15px;">
+                                <strong><i class="fas fa-calendar-alt fa-lg"></i> بەروار:</strong>
+                                <span class="text-muted">@Model.CreatedAt?.ToString("yyyy-MM-dd")</span>
+                            </p>
+                            <p style="font-size: 1.2em; margin-bottom: 15px;">
+                                <strong><i class="fas fa-user fa-lg"></i> بازرگان:</strong>
+                                <span class="text-muted">@Model.Contact?.Name</span>
+                            </p>
+                            <p style="font-size: 1.2em; margin-bottom: 15px;">
+                                <strong><i class="fas fa-mobile-alt fa-lg"></i> موبایل:</strong>
+                                <span class="text-muted">@Model.Contact?.Phone</span>
+                            </p>
+                        </div>
+                        <!-- Right Column -->
+                        <div class="col-md-6">
+                            <p style="font-size: 1.2em; margin-bottom: 15px;">
+                                <strong><i class="fas fa-tag fa-lg"></i> کۆی گشتی:</strong>
+                                <span class="text-muted">@Model.InvoiceTotal.ToString("N0")</span>
+                            </p>
+                            @{
+                                double totalPaid = Model.PurchaseInvoiceItems
+                                .Where(item => item.ContactPaymentId.HasValue)
+                                .Sum(item => item.LineTotal);
+
+                                double remainingAmount = Model.InvoiceTotal - totalPaid;
+                            }
+                            <p style="font-size: 1.2em; margin-bottom: 15px;">
+                                <strong><i class="fas fa-info-circle fa-lg"></i> بڕی واسڵکراو:</strong>
+                                <span class="text-muted">@totalPaid.ToString("N0")</span>
+                            </p>
+                            <p style="font-size: 1.2em; margin-bottom: 15px;">
+                                <strong><i class="fas fa-clock fa-lg"></i> بڕی ماوە:</strong>
+                                <span class="text-muted">@remainingAmount.ToString("N0")</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Items Table -->
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title m-0"><i class="fas fa-list-alt"></i> کاڵاکان</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped" id="purchase-items-table">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>کۆد</th>
+                                    <th>کاڵا</th>
+                                    <th>بڕ</th>
+                                    <th>نرخ</th>
+                                    <th>کۆ</th>
+                                    <th>گومرك</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.PurchaseInvoiceItems)
+                                {
+                                    <tr data-id="@item.Id" class="invoice-row @(item.ContactPaymentId.HasValue ? "paid-invoice" : "")">
+                                        <td>@item.Id</td>
+                                        <td>@item.Product?.Name</td>
+                                        <td class="editable" data-field="Quantity" contenteditable="true">@item.Quantity.ToString("N2")</td>
+                                        <td class="editable" data-field="UnitPrice" contenteditable="true">@item.UnitPrice.ToString("N2")</td>
+                                        <td>@item.LineTotal.ToString("N2")</td>
+                                        <td class="editable" data-field="TaxPresent" contenteditable="true">@item.TaxPresent.ToString("N2")</td>
+                                        <td>
+                                            <button class="btn btn-danger btn-sm" onclick="confirmDelete(@item.Id)"><i class="fas fa-trash"></i></button>
+                                            <button class="btn btn-warning btn-sm @(item.ContactPaymentId.HasValue ? "d-none" : "")" onclick="markAsPaid(@item.Id)">
+                                                <i class="fas fa-check"></i> پارەدان
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmation Modal -->
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmDeleteModalLabel">سڕینەوە پشتڕاست بکەرەوە</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">ئایە دڵنیای لە سڕینەوەی ئەم کاڵایە؟</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ڕەتکردنەوە</button>
+                        <button type="button" class="btn btn-danger" id="confirmDeleteButton">سڕینەوە</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Mark as Paid
+        function markAsPaid(invoiceId) {
+            if (confirm("ئایە دڵنیای لە پارەدانی ئەم کاڵایە؟")) {
+                $.post('/PurchaseInvoices/PayByInvoiceItemId', { Id: invoiceId })
+                    .done(function(response) {
+                        if (response.success) {
+                            alert("پارەدانەکە سەرکەوتووبوو");
+                            location.reload();
+                        } else {
+                            alert("هەڵە ڕوویدا لە پارەدان.");
+                        }
+                    })
+                    .fail(function() {
+                        alert("هەڵە ڕوویدا لە تایبەتمەندی پارەدان.");
+                    });
+            }
+        }
+
+        // Delete Item
+        let itemIdToDelete;
+        function confirmDelete(itemId) {
+            itemIdToDelete = itemId;
+            $('#confirmDeleteModal').modal('show');
+        }
+        $('#confirmDeleteButton').on('click', function () {
+            $.post('@Url.Action("DeleteItem")', { id: itemIdToDelete })
+                .done(function() {
+                    location.reload();
+                })
+                .fail(function(error) {
+                    alert("هەڵە ڕوویدا لە کاتی سڕینەوە: " + error.responseText);
+                });
+            $('#confirmDeleteModal').modal('hide');
+        });
+
+          $(document).ready(function () {
+            $('.editable').on('blur', function () {
+                var cell = $(this);
+                var row = cell.closest('tr');
+                var itemId = row.data('id');
+                var field = cell.data('field');
+                var newValue = cell.text().trim();
+
+                // Basic validation
+                if (field === 'Quantity') {
+                    // Check if newValue is a valid number and is a positive float
+                    if (isNaN(newValue) || parseFloat(newValue) <= 0) {
+                        alert('Quantity must be a positive number.');
+                        return;
+                    }
+                }
+                if (field === 'UnitPrice') {
+                    // Check if newValue is a valid number
+                    if (parseFloat(newValue) < 0) {
+                        alert('Unit Price must be a valid non-negative number.');
+                        return;
+                    }
+                }
+
+                // Make AJAX request to update the item
+                $.ajax({
+                    url: '@Url.Action("EditItem")', // Adjust the action name as necessary
+                    type: 'POST',
+                    data: {
+                        id: itemId,
+                        field: field,
+                        value: newValue
+                    },
+                    success: function (response) {
+                        // Refresh the entire page
+                        location.reload();
+                    },
+                    error: function (error) {
+                        alert('Error updating item: ' + error.responseText);
+                    }
+                });
+            });
+        });
+
+    </script>
+}

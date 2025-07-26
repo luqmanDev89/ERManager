@@ -10,7 +10,7 @@
         <projectUrl>http://www.jquery-steps.com</projectUrl>
 		<iconUrl>http://www.jquery-steps.com/icon.png</iconUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
-        <description>An all-in-one wizard plugin that is extremely flexible, compact and feature-rich.</description>
+        <Notes>An all-in-one wizard plugin that is extremely flexible, compact and feature-rich.</Notes>
         <summary>An all-in-one wizard plugin that is extremely flexible, compact and feature-rich.</summary>
         <copyright>� Copyright 2014, Rafael Staib</copyright>
         <tags>jQuery, Accessibility, Forms, HTML5, Navigation, Steps, Tabs, UI, Validation, Wizard</tags>

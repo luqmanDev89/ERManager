@@ -1,0 +1,108 @@
+﻿<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-9">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h4 class="header-title mb-0">کۆی مەسروفی بە پێیی بەشەکان</h4>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover mb-0" >
+                        <thead>
+                            <tr>
+                                <th class="border-top-0">جۆر</th>
+                                <th class="border-top-0">بڕ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.ExpensesByCategory)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.Category
+                                    </td>
+                                    <td>
+                                        @item.TotalAmount
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div> <!-- end table-responsive -->
+            </div> <!-- end card-->
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h4 class="header-title mb-0">مەسروفاتی ئەمڕۆ</h4>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover mb-0" >
+                        <thead>
+                            <tr>
+                                <th class="border-top-0">کۆد</th>
+                                <th class="border-top-0">جۆر</th>
+                                <th class="border-top-0">بڕ</th>
+                                <th class="border-top-0">بەروار</th>
+                                <th class="border-top-0">بەکارهێنەر</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.RecentExpenses)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.Id
+                                    </td>
+                                    <td>
+                                        @item.Category.Name
+                                    </td>
+                                    <td>
+                                        @item.Amount
+                                    </td>
+                                    <td>
+                                        @item.CreatedAt
+                                    </td>
+                                    <td>
+                                        @item.User.UserName
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div> <!-- end table-responsive -->
+            </div> <!-- end card -->
+        </div> <!-- end col -->
+
+        <div class="col-xl-3">
+            <div class="card bg-danger text-white mb-3">
+                <div class="card-header bg-danger">
+                    <h4 class="header-title  mb-0">کۆی مەسروف</h4>
+                    <p class="mb-0">@DateTime.Now.ToLongDateString()</p>
+                </div>
+                <div class="card-body">
+                    <h2 class="font-weight-light">@ViewBag.TotalExpenses.ToString("N0")</h2>
+                    <div class="pull-in margin-m-b-20">
+                        <canvas id="lineChart" height="122"></canvas>
+                    </div>
+                </div>
+            </div> <!-- end card -->
+
+            <div class="card bg-danger text-white mb-3">
+                <div class="card-header bg-danger">
+                    <h4 class="header-title mb-0">ژمارەی مەسروفەکان</h4>
+                    <p class="mb-0">@DateTime.Now.ToLongDateString()</p>
+                </div>
+                <div class="card-body">
+                    <h2 class="font-weight-light">@ViewBag.RecentExpenses.Count.ToString("N0")</h2>
+                    <div class="pull-in margin-m-b-20">
+                        <canvas id="lineChartPay" height="122"></canvas>
+                    </div>
+                </div>
+            </div> <!-- end card -->
+
+        </div> <!-- end col -->
+    </div> <!-- end row -->
+</div>
+
+@section Scripts {
+    <!-- Include any additional scripts for charts -->
+}

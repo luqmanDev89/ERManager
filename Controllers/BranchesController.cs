@@ -1,10 +1,12 @@
 ﻿using ERManager.Data;
 using ERManager.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ERManager.Controllers
 {
+    [Authorize(Roles = "Admin,User")]
     public class BranchesController : Controller
     {
         private readonly ERManagerContext _context;
@@ -115,6 +117,7 @@ namespace ERManager.Controllers
         }
 
         // GET: Branches/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -138,13 +141,31 @@ namespace ERManager.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var branch = await _context.Branches.FindAsync(id);
-            if (branch != null)
+            if (branch == null)
             {
-                _context.Branches.Remove(branch);
+                // If contact is not found, redirect to the Index page with an error message
+                TempData["ErrorMessage"] = "Contact not found or already deleted.";
+                return RedirectToAction(nameof(Index));
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Branches.Remove(branch);
+                await _context.SaveChangesAsync();
+
+                // Optionally set a success message to notify the user
+                TempData["SuccessMessage"] = "branch deleted successfully.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (optional)
+                // _logger.LogError(ex, "Error deleting contact with ID {ContactId}", id);
+
+                // Set an error message to show on the error page
+                TempData["ErrorMessage"] = "An error occurred while deleting the branch.";
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         private bool BranchExists(int id)
@@ -180,6 +201,30 @@ namespace ERManager.Controllers
 
             // Redirect back to the index page
             return RedirectToAction(nameof(Index));
+        }
+
+
+
+        // Method to check and create default branch if not exists
+        private void CreateDefaultBranchIfNeeded()
+        {
+            // Check if there are any branches in the database
+            var branchCount = _context.Branches.Count();
+            if (branchCount == 0)
+            {
+                // If no branches exist, create a default branch
+                var defaultBranch = new Branch
+                {
+                    Name = "لقی یەکەم",
+                    Location = "Default Location",
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                    IsDefault = true // Set this branch as the default
+                };
+
+                _context.Branches.Add(defaultBranch);
+                _context.SaveChanges();
+            }
         }
 
     }

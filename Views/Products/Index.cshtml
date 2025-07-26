@@ -1,65 +1,119 @@
 ﻿@model IEnumerable<ERManager.Models.Product>
 
-@{
-    ViewData["Title"] = "Index";
-}
 
-<h1>Index</h1>
+ <div class="container-fluid">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BuyingPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SellingPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Barcode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsActive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductCategory)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BuyingPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SellingPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Barcode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductCategory.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+                        <!-- Page title box -->
+                        <div class="page-title-box">
+                            <ol class="breadcrumb float-right">
+                                <li class="breadcrumb-item"><a href="javascript:void(0);">Greeva</a></li>
+                                <li class="breadcrumb-item"><a href="javascript:void(0);">Tables</a></li>
+                                <li class="breadcrumb-item active">کاڵاکان</li>
+                            </ol>
+                            <h4 class="page-title">کاڵاکان</h4>
+                        </div>
+                        <!-- End page title box -->
+
+                        <div class="row font-16 ">
+                            <div class="col-12">
+                                <div class="card-box">
+                                   <form method="get" id="filterForm">
+                                        <div class="row">
+                                            <!-- Category Name Filter -->
+                                            <div class="col-md-2">
+                                                <label for="CategoryName">جۆر</label>
+                                                <select id="CategoryId" name="CategoryId" class="form-control select2">
+                                                    <option value="">هەموو</option>
+                                                    @foreach (var category in ViewBag.Categories)
+                                                    {
+                                                         <option value="@category.Id" selected="@(ViewBag.CategoryId == category.Id? "selected" : null)">
+                                                             @category.Name
+                                                          </option>
+                                                    }
+                                                </select>
+                                            </div>
+
+                                            
+
+                                           
+                                            <!-- Notes Text Search -->
+                                            <div class="col-md-3">
+                                                <label for="Name">گەڕان</label>
+                                                <input type="text" id="Name" name="Name" value="@ViewBag.Name" placeholder="گەڕان بە پێی ناو " class="form-control" />
+                                            </div>
+
+                                            <!-- Filter Button -->
+                                            <div class="col-md-1">
+                                                <label>&nbsp;</label>
+                                                <button type="submit" class="btn btn-primary form-control">گەڕان</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="card-box">
+
+                                    <div class="table-rep-plugin">
+                                        <div class="table-responsive" >
+                                            <table id="tech-companies-1" class="table  table-bordered  table-striped">
+                                                <thead class="thead-light">
+                                                <tr>
+                                                    <th >@Html.DisplayNameFor(model => model.Id)</th>
+                                                    <th data-priority="1">@Html.DisplayNameFor(model => model.Barcode)</th>
+                                                    <th data-priority="3">@Html.DisplayNameFor(model => model.ProductCategory)</th>
+                                                    <th data-priority="1">@Html.DisplayNameFor(model => model.Name)</th>
+                                                    <th data-priority="1">@Html.DisplayNameFor(model => model.BuyingPrice)</th>
+                                                    <th data-priority="3">@Html.DisplayNameFor(model => model.SellingPrice)</th>
+                                                    <th data-priority="3">@Html.DisplayNameFor(model => model.IsActive) </th>
+                                                    <th data-priority="6">Actions</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model)
+                                                    {
+                                                                  <tr>
+                                                                    <th>@item.Id</th>
+                                                                    <th>@Html.DisplayFor(modelItem => item.Barcode)</th>
+                                                                    <td>@Html.DisplayFor(modelItem => item.ProductCategory.Name)</td>
+                                                                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                                                    <td>@Html.DisplayFor(modelItem => item.BuyingPrice)</td>
+                                                                    <td>@Html.DisplayFor(modelItem => item.SellingPrice)</td>
+                                                                    <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
+                                                                    <td>
+                                                                         <div class="btn-group" role="group">
+                                                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">نوێکردنەوە</a>
+                                                                        <form asp-action="Delete" asp-route-id="@item.Id" method="post" style="display:inline;" onsubmit="return confirmDelete();">
+                                                                           <button type="submit" class="btn btn-danger btn-sm" >سڕینەوە</button>
+                                                                         </form>
+                                                                    </div>
+                                                                    </td>
+                                                                  </tr>
+                                                            }
+
+                                                </tbody>
+                                            </table>
+                                        </div> <!-- end table-responsive-->
+
+                                    </div> <!-- table-rep-plugin-->
+                                 
+                                </div> <!-- end card-box -->
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->
+
+
+                    </div> <!-- end container-fluid-->
+
+@section Scripts {
+
+    <!-- Responsive table -->
+    <script src="~/assets/libs/RWD-Table-Patterns/js/rwd-table.min.js" asp-append-version="true"></script>
+
+                   <script>
+                    function confirmDelete() {
+                        return confirm("ئایا دڵنیایت لە سڕینەوەی ئەم  مەسروفە؟");
+                    }
+                   </script>
+
 }
-    </tbody>
-</table>

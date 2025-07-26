@@ -1,0 +1,72 @@
+﻿@model ERManager.ViewModels.Sales.CapitalSheetViewModel
+<div class="container my-5">
+    <h1 class="text-center mb-4 display-3">سەرمایە</h1> <!-- Increased title font size -->
+
+    <div class="row">
+        <!-- Total Seller Debt -->
+        <div class="col-md-4 mb-3">
+            <div class="card border-danger shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title font-weight-bold fs-2">
+                        <!-- Increased font size -->
+                        <i class="fas fa-user-minus text-danger me-2"></i> کۆی قەرزی دابینکەر
+                    </h5>
+                    <p class="card-text text-danger font-weight-bold display-4">
+                        <!-- Increased font size -->
+                        @Model.TotalSellerDebt.ToString("N0")
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Buyer Debt -->
+        <div class="col-md-4 mb-3">
+            <div class="card border-warning shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title font-weight-bold fs-2">
+                        <!-- Increased font size -->
+                        <i class="fas fa-user-plus text-warning me-2"></i>  کۆی قەرزی مشتەری
+                    </h5>
+                    <p class="card-text text-warning font-weight-bold display-4">
+                        <!-- Increased font size -->
+                        @Model.TotalBuyerDebt.ToString("N0")
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Treasuries Balance -->
+        <div class="col-md-4 mb-3">
+            <div class="card border-success shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title font-weight-bold fs-2">
+                        <!-- Increased font size -->
+                        <i class="fas fa-piggy-bank text-success me-2"></i>کۆی باڵانسی قاسەکان
+                    </h5>
+                    <p class="card-text text-success font-weight-bold display-4">
+                        <!-- Increased font size -->
+                        @Model.TotalTreasuriesBalance.ToString("N0")
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final Total Summary -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card border-primary shadow-sm">
+                <div class="card-body text-center">
+                    <h3 class="card-title font-weight-bold fs-1">
+                        <!-- Increased font size -->
+                        <i class="fas fa-balance-scale text-primary me-2"></i> سەرمایە
+                    </h3>
+                    <p class="card-text text-primary font-weight-bold display-3">
+                        <!-- Increased font size -->
+                        @Model.FinalTotal.ToString("N0")
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

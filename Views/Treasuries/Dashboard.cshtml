@@ -1,0 +1,115 @@
+﻿@model ERManager.ViewModels.Treasury.DashboardViewModel
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-9">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h4 class="header-title mb-0">جالاکی ئەمڕۆ</h4>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover mb-0" id="datatable">
+                        <thead>
+                            <tr>
+                                <th class="border-top-0">کۆد</th>
+                                <th class="border-top-0">قاسە</th>
+                                <th class="border-top-0">جۆر</th>
+                                <th class="border-top-0">بڕ</th>
+                                <th class="border-top-0">تێبینی</th>
+                                <th class="border-top-0">بەروار</th>
+                                <th class="border-top-0">نوێکردنەوە</th>
+                                <th class="border-top-0">بەکارهێنەر</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.TreasuriesActivities)
+                            {
+                                <tr>
+                                    <td>@item.TreasuryId</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Type</td>
+                                    <td>@item.Amount</td>
+                                    <td>@item.Notes</td>
+                                    <td>@item.CreatedAt</td>
+                                    <td>@item.UpdateAt</td>
+                                    <td>@item.UserName</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div> <!-- end table-responsive -->
+            </div> <!-- end card-->
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h4 class="header-title mb-0">باڵانسی قاسەکان</h4>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover mb-0" id="datatable">
+                        <thead>
+                            <tr>
+                                <th class="border-top-0">کۆد</th>
+                                <th class="border-top-0">قاسە</th>
+                                <th class="border-top-0">بڕی باڵانس</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.TreasuryTotal)
+                            {
+                                <tr>
+                                    <td>@item.TreasuryId</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.TreasuryTotal.ToString("N2")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div> <!-- end table-responsive -->
+            </div> <!-- end card -->
+        </div> <!-- end col -->
+
+        <div class="col-xl-3">
+            <div class="card bg-info text-white mb-3">
+                <div class="card-header bg-info">
+                    <h4 class="header-title  mb-0">کۆی باڵانسی قاسەکان</h4>
+                    <p class="mb-0">@DateTime.Now.ToLongDateString()</p>
+                </div>
+                <div class="card-body">
+                    <h2 class="font-weight-light">@Model.TreasuryTotal.Sum(d=>d.TreasuryTotal).ToString("N0")</h2>
+                    <div class="pull-in margin-m-b-20">
+                        <canvas id="lineChart" height="122"></canvas>
+                    </div>
+                </div>
+            </div> <!-- end card -->
+
+            <div class="card bg-danger text-white mb-3">
+                <div class="card-header bg-danger">
+                    <h4 class="header-title mb-0">کۆی دەرچووی قاسەکان</h4>
+                    <p class="mb-0">@DateTime.Now.ToLongDateString()</p>
+                </div>
+                <div class="card-body">
+                    <h2 class="font-weight-light">@Model.TreasuriesActivities.Where(d => d.Type == "مەسروف" || d.Type == "پارەدان" || d.Type == "ڕاکێشانی پارە").Sum(d => d.Amount).ToString("N0")</h2>
+                    <div class="pull-in margin-m-b-20">
+                        <canvas id="lineChartPay" height="122"></canvas>
+                    </div>
+                </div>
+            </div> <!-- end card -->
+            <div class="card bg-success text-white mb-3">
+                <div class="card-header bg-success">
+                    <h4 class="header-title mb-0">کۆی هاتووی قاسەکان</h4>
+                    <p class="mb-0">@DateTime.Now.ToLongDateString()</p>
+                </div>
+                <div class="card-body">
+                    <h2 class="font-weight-light">@Model.TreasuriesActivities.Where(d => d.Type == "زیادکردنی پارە" || d.Type == "پارەوەرگرتن").Sum(d => d.Amount).ToString("N0")</h2>
+                    <div class="pull-in margin-m-b-20">
+                        <canvas id="lineChartPay" height="122"></canvas>
+                    </div>
+                </div>
+            </div> <!-- end card -->
+        </div> <!-- end col -->
+    </div> <!-- end row -->
+</div>
+
+@section Scripts {
+    <!-- Include any additional scripts for charts -->
+}

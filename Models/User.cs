@@ -1,42 +1,47 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ERManager.Models
 {
-    public enum UserRole
+    public class User : IdentityUser // Inherit from IdentityUser
     {
-        Admin,
-        User,
-        Manager,
-        // Add other roles as needed
-    }
-
-    public class User
-    {
-        [Key]
-        public int Id { get; set; } // Primary key
+        // The Id property is already provided by IdentityUser, so you don't need to redefine it.
 
         [Required]
         [StringLength(100)]
-        public required string Username { get; set; } // Unique username for the user
+        public override string UserName { get; set; } // Unique username for the user
 
-        [Required]
-        [StringLength(100)]
-        [PasswordPropertyText]
-        public required string Password { get; set; } // Hashed password for authentication
+        // Removed custom enum for role, since we're using ASP.NET Identity roles
 
-        [Required]
-        public UserRole Role { get; set; } // User role (using enum for type safety)
-
+        [DataType(DataType.DateTime)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime CreatedAt { get; set; } = DateTime.Now; // Creation timestamp
+
+        [DataType(DataType.DateTime)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime UpdatedAt { get; set; } = DateTime.Now; // Last update timestamp
 
         // Navigation properties
-        public ICollection<ContactPayment> ContactPayments { get; set; } = new List<ContactPayment>();
-        public ICollection<Contact> Contacts { get; set; } = new List<Contact>();
-        public ICollection<Expenses> Expenses { get; set; } = new List<Expenses>();
-        public ICollection<MoneyTransaction> MoneyTransactions { get; set; } = new List<MoneyTransaction>();
-        public ICollection<Treasury> Treasuries { get; set; } = new List<Treasury>();
-        public ICollection<TreasuryMoneyTransfer> TreasuryMoneyTransfers { get; set; } = new List<TreasuryMoneyTransfer>();
+        public ICollection<ContactPayment> ContactPayments { get; set; }
+        public ICollection<Contact> Contacts { get; set; }
+        public ICollection<Expenses> Expenses { get; set; }
+        public ICollection<MoneyTransaction> MoneyTransactions { get; set; }
+        public ICollection<Treasury> Treasuries { get; set; }
+        public ICollection<TreasuryMoneyTransfer> TreasuryMoneyTransfers { get; set; }
+        public ICollection<PurchaseInvoice> PurchaseInvoices { get; set; }
+        public ICollection<SaleInvoice> SaleInvoices { get; set; }
+
+        public User()
+        {
+            ContactPayments = new List<ContactPayment>();
+            Contacts = new List<Contact>();
+            Expenses = new List<Expenses>();
+            MoneyTransactions = new List<MoneyTransaction>();
+            Treasuries = new List<Treasury>();
+            TreasuryMoneyTransfers = new List<TreasuryMoneyTransfer>();
+            PurchaseInvoices = new List<PurchaseInvoice>();
+            SaleInvoices = new List<SaleInvoice>();
+        }
     }
 }

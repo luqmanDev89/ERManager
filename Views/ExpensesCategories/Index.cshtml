@@ -3,33 +3,72 @@
 @{
     ViewData["Title"] = "Index";
 }
+ <div class="container-fluid">
 
-<h1>Index</h1>
+                        <!-- Page title box -->
+                        <div class="page-title-box">
+                            <ol class="breadcrumb float-right">
+                                <li class="breadcrumb-item"><a href="javascript:void(0);">Greeva</a></li>
+                                <li class="breadcrumb-item"><a href="javascript:void(0);">Tables</a></li>
+                                <li class="breadcrumb-item active">جۆری مەسرف</li>
+                            </ol>
+                            <h4 class="page-title">جۆری مەسروف</h4>
+                        </div>
+                        <!-- End page title box -->
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+                        <div class="row font-16 ">
+
+                            <div class="col-12">
+                                <div class="card-box">
+
+                                    <div class="table-rep-plugin">
+                                        <div class="table-responsive" >
+                                           <table id="tech-companies-1" class="table table-bordered table-striped">
+                                                <thead class="thead-light">
+                                                    <tr>
+                                                        <th>کۆد</th>
+                                                        <th data-priority="3">ناو</th>
+                                                        <th data-priority="6">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                    <tbody>
+                                                        @foreach (var item in Model)
+                                                                            {
+                                                            <tr>
+                                                                <th>@item.Id</th>
+                                                                <td>@item.Name</td>
+                                                                <td>
+                                                                    <div class="btn-group" role="group">
+                                                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">نوێکردنەوە</a>
+                                                                        <form asp-action="Delete" asp-route-id="@item.Id" method="post" style="display:inline;" onsubmit="return confirmDelete();">
+                                                                           <button type="submit" class="btn btn-danger btn-sm" >سڕینەوە</button>
+                                                                         </form>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                                            }
+                                                </tbody>
+                                            </table>
+
+                                        </div> <!-- end table-responsive-->
+
+                                    </div> <!-- table-rep-plugin-->
+
+                                </div> <!-- end card-box -->
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->
+
+
+                    </div> <!-- end container-fluid-->
+
+@section Scripts {
+    <!-- Responsive table -->
+    <script src="~/assets/libs/RWD-Table-Patterns/js/rwd-table.min.js" asp-append-version="true"></script>
+
+                    <script>
+                    function confirmDelete() {
+                        return confirm("ئایا دڵنیایت لە سڕینەوەی ئەم جۆری مەسروفە؟");
+                    }
+                   </script>
 }
-    </tbody>
-</table>

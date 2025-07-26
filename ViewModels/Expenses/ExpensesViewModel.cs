@@ -10,12 +10,12 @@ namespace ERManager.ViewModels.Expenses
 
         [StringLength(200)]
         [DisplayName("توصیف")]
-        public string? Description { get; set; }
+        public string? Notes { get; set; }
 
         [Required(ErrorMessage = "تکایە بڕی مەسروف داخل بکە")]
         [Range(0.01, double.MaxValue, ErrorMessage = "پێویستە لە سفر زیاتر بێت")]
         [DisplayName("بڕ")]
-        public decimal Amount { get; set; }
+        public double Amount { get; set; }
 
         [Required(ErrorMessage = "تکایە قاسە دیاری بکە")]
         [DisplayName("قاسە")]

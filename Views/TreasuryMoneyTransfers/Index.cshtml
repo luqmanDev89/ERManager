@@ -3,69 +3,142 @@
 @{
     ViewData["Title"] = "Index";
 }
+<div class="container-fluid">
 
-<h1>Index</h1>
+    <!-- Page title box -->
+    <div class="page-title-box">
+        <ol class="breadcrumb float-right">
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Greeva</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Tables</a></li>
+            <li class="breadcrumb-item active">لیستی گواستنەوەی ڕۆسید</li>
+        </ol>
+        <h4 class="page-title">لیستی گواستنەوەی</h4>
+    </div>
+    <!-- End page title box -->
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.SourceTreasury)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DestinationTreasury)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Amount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdateAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Currency)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.SourceTreasury.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DestinationTreasury.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdateAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Password)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Currency.Code)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TransferId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TransferId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TransferId">Delete</a>
-            </td>
-        </tr>
+    <div class="row font-16">
+        <div class="col-12">
+            <div class="card-box">
+                <form method="get" id="filterForm">
+                    <div class="row">
+                        <!-- Treasury Name Filter -->
+                        <div class="col-12 col-md-6 col-lg-2 mb-2">
+                            <label for="SourceTreasuryId">لە قاسەی</label>
+                            <select id="SourceTreasuryId" name="SourceTreasuryId" class="form-control select2">
+                                <option value="">هەموو</option>
+                                @foreach (var Treasury in ViewBag.Treasuries)
+                                {
+                                    <option value="@Treasury.TreasuryId" selected="@(ViewBag.SourceTreasuryId == Treasury.TreasuryId ? "selected" : null)">
+                                        @Treasury.Name
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                        <!-- Destination Treasury Filter -->
+                        <div class="col-12 col-md-6 col-lg-2 mb-2">
+                            <label for="DestinationTreasuryId">بۆ قاسەی</label>
+                            <select id="DestinationTreasuryId" name="DestinationTreasuryId" class="form-control select2">
+                                <option value="">هەموو</option>
+                                @foreach (var Treasury in ViewBag.Treasuries)
+                                {
+                                    <option value="@Treasury.TreasuryId" selected="@(ViewBag.DestinationTreasuryId == Treasury.TreasuryId ? "selected" : null)">
+                                        @Treasury.Name
+                                    </option>
+                                }
+                            </select>
+                        </div>
+
+                        <!-- Date Range Filter -->
+                        <div class="col-12 col-md-6 col-lg-2 mb-2">
+                            <label for="startDate">لە بەرواری</label>
+                            <input type="date" id="startDate" value="@ViewBag.startDate?.ToString("yyyy-MM-dd")" name="startDate" class="form-control" />
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-2 mb-2">
+                            <label for="endDate">بۆ بەرواری</label>
+                            <input type="date" id="endDate" value="@ViewBag.endDate?.ToString("yyyy-MM-dd")" name="endDate" class="form-control" />
+                        </div>
+
+                        <!-- Notes Text Search -->
+                        <div class="col-12 col-md-6 col-lg-2 mb-2">
+                            <label for="Notes">گەڕان</label>
+                            <input type="text" id="Notes" name="Notes" value="@ViewBag.Notes" placeholder="گەڕان لە تێبینی" class="form-control" />
+                        </div>
+
+                        <!-- Filter Button -->
+                        <div class="col-12 col-md-6 col-lg-2 mb-2">
+                            <label>&nbsp;</label>
+                            <button type="submit" class="btn btn-primary form-control">گەڕان</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card-box">
+                <div class="table-rep-plugin">
+                    <div class="table-responsive">
+                        <table id="tech-companies-1" class="table table-bordered table-striped">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>@Html.DisplayNameFor(model => model.TransferId)</th>
+                                    <th data-priority="1">@Html.DisplayNameFor(model => model.SourceTreasury)</th>
+                                    <th data-priority="1">@Html.DisplayNameFor(model => model.DestinationTreasury)</th>
+                                    <th data-priority="3">@Html.DisplayNameFor(model => model.Amount)</th>
+                                    <th data-priority="1">@Html.DisplayNameFor(model => model.Notes)</th>
+                                    <th data-priority="1">@Html.DisplayNameFor(model => model.CreatedAt)</th>
+                                    <th data-priority="3">@Html.DisplayNameFor(model => model.UpdateAt)</th>
+                                    <th data-priority="3">@Html.DisplayNameFor(model => model.User)</th>
+                                    <th data-priority="6">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <th>@item.TransferId</th>
+                                        <th>@Html.DisplayFor(modelItem => item.SourceTreasury.Name)</th>
+                                        <th>@Html.DisplayFor(modelItem => item.DestinationTreasury.Name)</th>
+                                        <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Notes)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.CreatedAt)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.UpdateAt)</td>
+                                        <td>@item.User?.UserName</td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a asp-action="Edit" asp-route-id="@item.TransferId" class="btn btn-sm btn-primary">نوێکردنەوە</a>
+                                                <form asp-action="Delete" asp-route-id="@item.TransferId" method="post" style="display:inline;" onsubmit="return confirmDelete();">
+                                                    <button type="submit" class="btn btn-danger btn-sm">سڕینەوە</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="card-box">
+                            <span>کۆی هاتوو :</span> @ViewBag.total.ToString("N0")
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Responsive table -->
+    <script src="~/assets/libs/RWD-Table-Patterns/js/rwd-table.min.js" asp-append-version="true"></script>
+
+    <script>
+        function confirmDelete() {
+            return confirm("ئایا دڵنیایت لە سڕینەوەی ئەم مەسروفە؟");
+        }
+    </script>
 }
-    </tbody>
-</table>

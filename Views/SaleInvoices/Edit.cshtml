@@ -1,0 +1,514 @@
+﻿@model ERManager.Models.SaleInvoice
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="container-fluid">
+
+    <div class="row font-16">
+        <div class="col-md-3">
+            <div class="card shadow-sm p-4 mb-4">
+                <!-- Form Start -->
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <input type="hidden" asp-for="Id" />
+
+                    <!-- Contact Selection -->
+                    <div class="form-group mb-4">
+                        <label asp-for="ContactId" class="control-label"></label>
+                        <select asp-for="ContactId" class="form-control select2" asp-items="ViewBag.ContactId"></select>
+                        <span asp-validation-for="ContactId" class="text-danger"></span>
+                    </div>
+
+                    <!-- Contact Information Card -->
+                    <div class="card mb-4 border border-secondary rounded">
+                        <div class="d-flex justify-content-between align-items-center p-3">
+                            <div class="d-flex align-items-center">
+                                <img src="~/static/img/investor.png" alt="icon" class="icon me-3" style="width: 40px; height: 40px;">
+                                <div class="d-flex flex-column">
+                                    <a asp-action="ContactBalance" asp-controller="Contacts" asp-route-startDate="@DateTime.Now.Date.ToString("yyyy-MM-dd")" asp-route-endDate="@DateTime.Now.Date.AddMonths(1).ToString("yyyy-MM-dd")" asp-route-contactId="@Model.Contact?.Id">
+                                        <h6 class="card-title mb-0">@Model.Contact?.Name</h6>
+                                    </a>
+
+                                    <p class="card-text mb-0">@Model.Contact?.Address, <a href="tel:@Model.Contact?.Phone">@Model.Contact?.Phone</a></p>
+                                </div>
+                            </div>
+                            <div class="balance-text">
+                                <span class="font-weight-bold text-orange">@ViewBag.Balance.ToString("N0")</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="form-group mb-4">
+                        <label asp-for="Notes" class="control-label"></label>
+                        <input asp-for="Notes" class="form-control" />
+                        <span asp-validation-for="Notes" class="text-danger"></span>
+                    </div>
+
+                    <!-- Discount -->
+                    <div class="form-group mb-4">
+                        <label asp-for="Discount" class="control-label">
+                            <span class="text-primary">داشکان</span>
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="تکایە بڕی داشکان بنووسە."></i>
+                        </label>
+                        <input asp-for="Discount" class="form-control bg-danger text-white" placeholder="تکایە بڕی داشکان زیاد بکە" style="background-color: #f87171; height: 40px; font-size: 1rem;" />
+                        <span asp-validation-for="Discount" class="text-danger"></span>
+                    </div>
+
+                    <!-- Tax -->
+                    <div class="form-group mb-4">
+                        <label asp-for="Tax" class="control-label">
+                            <span class="text-success">سعی</span>
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="تکایە بڕی مەسروف بنووسە."></i>
+                        </label>
+                        <input asp-for="Tax" class="form-control text-white" placeholder="تکایە بڕی مەسروف بنووسە" style="background-color: #34d399; height: 40px; font-size: 1rem;" />
+                        <span asp-validation-for="Tax" class="text-danger"></span>
+                    </div>
+
+                    <!-- DriverTax -->
+                    <div class="form-group mb-4">
+                        <label asp-for="DriverTax" class="control-label">
+                            <span class="text-info">کڕێی شۆفێر</span>
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="تکایە بڕی کرێی شۆفێر بنووسە."></i>
+                        </label>
+                        <input asp-for="DriverTax" class="form-control text-white" placeholder="تکایە بڕی کرێی شۆفێر بنووسە" style="background-color: #60a5fa; height: 40px; font-size: 1rem;" />
+                        <span asp-validation-for="DriverTax" class="text-danger"></span>
+                    </div>
+
+                    <!-- EmployeTax -->
+                    <div class="form-group mb-4">
+                        <label asp-for="EmployeTax" class="control-label">
+                            <span class="text-primary">کرێی کرێکار</span>
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="تکایە بڕی کرێی کرێکار بنووسە."></i>
+                        </label>
+                        <input asp-for="EmployeTax" class="form-control text-white" placeholder="تکایە بڕی کرێی کرێکار بنووسە." style="background-color: #4ade80; height: 40px; font-size: 1rem;" />
+                        <span asp-validation-for="EmployeTax" class="text-danger"></span>
+                    </div>
+
+                    <!-- EmployeTax -->
+                    <div class="form-group mb-4">
+                        <label asp-for="Expenses" class="control-label">
+                            <span class="text-primary">مەسروف</span>
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="تکایە بڕی  مەسروف بنووسە."></i>
+                        </label>
+                        <input asp-for="Expenses" class="form-control text-white" placeholder="تکایە بڕی  مەسروف بنووسە." style="background-color: #4ade80; height: 40px; font-size: 1rem;" />
+                        <span asp-validation-for="Expenses" class="text-danger"></span>
+                    </div>
+
+                    <!-- Total -->
+                    <div class="form-group mb-4">
+                        <label class="control-label">
+                            <span class="text-warning">کۆی گشتی</span>
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Total amount calculated from the invoice items."></i>
+                        </label>
+                        <input value="@((Model.SaleInvoiceItems?.FirstOrDefault()?.SaleInvoice.InvoiceTotal ?? 0).ToString("N0"))"
+                               class="form-control text-dark" readonly placeholder="کۆی گشتی" style="background-color: #fef3c7; height: 40px; font-size: 1rem;" />
+                    </div>
+
+
+
+                    <!-- Total Invoice Profit -->
+                    <div class="form-group mb-4">
+                        <label class="control-label">
+                            <span class="text-warning">کۆی قازانج</span>
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Total amount calculated from the invoice items."></i>
+                        </label>
+                        <input value="@ViewBag.InvoiceProfit.ToString("N0")"
+                               class="form-control @(ViewBag.InvoiceProfit < 0 ? "text-danger" : "text-success")" readonly
+                               placeholder="کۆی قازانج" style="background-color: #fef3c6; height: 40px; font-size: 1rem;" />
+                    </div>
+
+
+                    <!-- Created At -->
+                    <div class="form-group mb-4">
+                        <label asp-for="CreatedAt" class="control-label"></label>
+                        <input asp-for="CreatedAt" class="form-control" />
+                        <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                    </div>
+
+                    <!-- Submit Buttons Grouped with Medium Size and Responsive Text -->
+                    <div class="form-group mb-4">
+                        <div class="row">
+                            <div class="col-md-4 mb-2">
+                                <input type="submit" value="خەزنکردن" class="btn btn-success w-100 btn-md text-nowrap" />
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <a asp-action="Print" asp-route-id="@Model.Id" class="btn btn-warning w-100 btn-md text-nowrap" target="_blank">جاپکردن</a>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <a asp-action="Create" class="btn btn-warning w-100 btn-md text-nowrap">نوێ</a>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <a asp-action="Index" class="btn btn-secondary w-100 btn-md text-nowrap">لیست</a>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <a class="btn btn-danger w-100 text-white   btn-md text-nowrap"
+                                   onclick="InvoiceconfirmDeleteForInvoice(@Model.Id)">
+                                    سڕینەوە
+                                </a>
+
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <a asp-action="SaleInvoiceItems" asp-route-SaleInvoiceId="@Model.Id" class="btn btn-secondary w-100 btn-md text-nowrap">پسوولەی کڕین</a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </form>
+
+                <!-- Form End -->
+            </div> <!-- end card -->
+
+        </div> <!-- end col -->
+
+        <div class="col-md-9">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="mb-3">زیادکردنی کاڵا</h4>
+                    <form asp-action="AddItem" class="form row g-3">
+                        <!-- Product dropdown -->
+                        <div class="col-md-3">
+                            <label for="ProductId" class="form-label">کاڵا</label>
+                            <select id="ProductId" name="NewProductId" class="form-select select2">
+                                <option selected disabled>کاڵا دیاری بکە</option>
+                                @foreach (var product in ViewBag.Products)
+                                {
+                                    <option value="@product.Id" data-cost="@product.BuyingPrice" data-price="@product.SellingPrice">@product.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <!-- Quantity input -->
+                        <div class="col-md-2">
+                            <label for="NewProductQuantity" class="form-label">بڕ</label>
+                            <input type="number" id="NewProductQuantity" name="NewProductQuantity" min="0.1" step="0.1" class="form-control" required />
+                        </div>
+
+                        <!-- Unit Price input -->
+                        <div class="col-md-2">
+                            <label for="NewProductUnitPrice" class="form-label">نرخ</label>
+                            <input type="text" id="NewProductUnitPrice" name="NewProductUnitPrice" class="form-control" />
+                        </div>
+                        <!-- Unit Price input -->
+                        <div class="col-md-0">
+                            <input type="text" id="NewProductUnitBuyPrice" name="NewProductUnitBuyPrice" class="form-control" hidden />
+                        </div>
+                        <!-- TaxPresent  input -->
+                        <div class="col-md-1">
+                            <label for="NewTaxPresent" class="form-label">گومرك</label>
+                            <input type="text" id="NewTaxPresent" name="NewTaxPresent" class="form-control" value="0" />
+                        </div>
+                        <!-- Product dropdown -->
+                        <div class="col-md-2">
+                            <label for="NewContactId" class="form-label">کڕیار</label>
+                            <select id="NewContactId" name="NewContactId" class="form-select select2">
+                                <option selected disabled>کڕیارێك دیاری بکە</option>
+                                @foreach (var supplier in ViewBag.Suppliers)
+                                {
+                                    <option value="@supplier.Id" data-cost="@supplier.Id" data-price="@supplier.Name">@supplier.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <!-- Invoice Id input (hidden) -->
+                        <input type="hidden" name="InvoiceId" value="@Model.Id" />
+                        <input type="hidden" id="EditItemId" name="EditItemId" value="" />
+
+                        <!-- Submit button -->
+                        <div class="col-md-1 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">زیادکردن</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="mb-3">لیستی کاڵاکان</h4>
+                    <table id="tech-companies-1" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">کۆد</th>
+                                <th scope="col">کاڵا</th>
+                                <th scope="col">بڕ</th>
+                                <th scope="col">نرخ</th>
+                                <th scope="col">کۆ</th>
+                                <th scope="col">گومرك</th>
+                                <th scope="col">نرخی کڕین</th>
+                                <th scope="col">کۆی کڕین</th>
+                                <th scope="col">قازانج</th>
+                                <th scope="col">مکتب</th>
+                                <th scope="col" class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int RecordNumber = 1;
+                            }
+                            @foreach (var item in Model.SaleInvoiceItems)
+                            {
+                                <tr data-id="@item.Id">
+                                    <td>@RecordNumber</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Product.Name)</td>
+                                    <td class="editable text-end" data-field="Quantity" contenteditable="true">
+                                        @(item.Quantity == 0 ? "0" : item.Quantity.ToString("N2").TrimEnd('0').TrimEnd('.'))
+                                    </td>
+                                    <td class="editable text-end" data-field="UnitPrice" contenteditable="true">
+                                        @(item.UnitPrice == 0 ? "0" : item.UnitPrice.ToString("N2").TrimEnd('0').TrimEnd('.'))
+                                    </td>
+                                    <td class="text-end">
+                                        @(item.LineTotal == 0 ? "0" : item.LineTotal.ToString("N2"))
+                                    </td>
+                                    <td class="editable text-end" data-field="TaxPresent" contenteditable="true">
+                                        @(item.TaxPresent == 0 ? "0" : item.TaxPresent.ToString("N2").TrimEnd('0').TrimEnd('.'))
+                                    </td>
+                                    <td class="editable text-end" data-field="UnitBuyPrice" contenteditable="true">
+                                        @(item.UnitBuyPrice == 0 ? "0" : item.UnitBuyPrice.ToString("N2").TrimEnd('0').TrimEnd('.'))
+                                    </td>
+                                    <td class="text-end">@Html.DisplayFor(modelItem => item.LineBuyTotal)</td>
+                                    <td class="text-end @(item.Profit < 0 ? "text-danger" : "text-success")">
+                                        @(item.Profit.ToString("N2"))
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <select id="SelectedBuyerId" name="SelectedBuyerId" asp-for="@item.ContactId" asp-items="ViewBag.Buyers" class="form-control">
+                                                <option id="@item.ContactId" value="">مکتب دیاری بکە</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td class="text-end">
+                                        <button class="btn btn-danger" onclick="InvoiceconfirmDeleteForItem(@item.Id)">سڕینەوە</button>
+                                    </td>
+
+                                </tr>
+                                RecordNumber++;
+                            }
+                        </tbody>
+                    </table>
+
+                    <!-- Totals Section with Bootstrap Styling -->
+                    <div class="mt-4 p-3 bg-light rounded border">
+                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <h5 class="fw-bold text-primary">کۆی گشتی دانە :</h5>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <h5 class="fw-bold text-dark">@Model.SaleInvoiceItems.Sum(d => d.Quantity).ToString("N0")</h5>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <h5 class="fw-bold text-primary">کۆی گشتی نرخ :</h5>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <h5 class="fw-bold text-dark">@Model.SaleInvoiceItems.Sum(d => d.LineTotal).ToString("N0")</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!-- Confirmation Modal HTML -->
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmDeleteModalLabel">سڕینەوە پشتڕاست بکەرەوە</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        دڵنیای کە دەتەوێت ئەم کاڵایە بسڕیتەوە؟
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ڕەتکردنەوە</button>
+                        <button type="button" class="btn btn-danger" id="confirmDeleteButton">سڕینەوە</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invoice Confirmation Modal HTML -->
+        <!-- Confirmation Modal HTML -->
+        <div class="modal fade" id="InvoiceconfirmDeleteModal" tabindex="-1" aria-labelledby="InvoiceconfirmDeleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="InvoiceconfirmDeleteModalLabel">سڕینەوە پشتڕاست بکەرەوە</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        دڵنیای کە دەتەوێت ئەم پسوولەیە بسڕیتەوە؟
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ڕەتکردنەوە</button>
+                        <button type="button" class="btn btn-danger" id="InvoiceconfirmDeleteButton">سڕینەوە</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <!-- end row -->
+
+</div> <!-- end container-fluid -->
+@section ScriptsInside {
+    <!-- Responsive table -->
+    <script src="~/assets/libs/RWD-Table-Patterns/js/rwd-table.min.js" asp-append-version="true"></script>
+
+    <script>
+        var itemIdToDelete; // Global variable to store the ID of the item to delete
+        var InvoiceIdToDelete; // Global variable to store the ID of the invoice to delete
+
+        $(document).ready(function () {
+            // Handle Product change
+            $('#ProductId').change(function () {
+                var selectedOption = $(this).find('option:selected');
+                var price = selectedOption.data('price');
+                var Buyprice = selectedOption.data('cost');
+                $('#NewProductUnitPrice').val(Buyprice);
+                $('#NewProductUnitBuyPrice').val(price);
+            });
+
+            // Handle editable fields (e.g., Quantity, UnitPrice)
+            $('.editable').on('blur', function () {
+                var cell = $(this);
+                var row = cell.closest('tr');
+                var itemId = row.data('id');
+                var field = cell.data('field');
+                var newValue = cell.text().trim();
+
+                // Basic validation
+                if (field === 'Quantity') {
+                    if (isNaN(newValue) || parseFloat(newValue) <= 0) {
+                        alert('Quantity must be a positive number.');
+                        return;
+                    }
+                }
+                if (field === 'UnitPrice') {
+                    if (parseFloat(newValue) < 0) {
+                        alert('Unit Price must be a valid non-negative number.');
+                        return;
+                    }
+                }
+
+                // Make AJAX request to update the item
+                $.ajax({
+                    url: '@Url.Action("EditItem")', // Adjust the action name as necessary
+                    type: 'POST',
+                    data: {
+                        id: itemId,
+                        field: field,
+                        value: newValue
+                    },
+                    success: function (response) {
+                        location.reload(); // Refresh the page to reflect changes
+                    },
+                    error: function (error) {
+                        alert('Error updating item: ' + error.responseText);
+                    }
+                });
+            });
+
+            // Listen for changes in the select dropdown (Buyer)
+            $('select[name="SelectedBuyerId"]').on('change', function () {
+                var selectedBuyerId = $(this).val(); // Get the selected buyer ID
+                var row = $(this).closest('tr'); // Find the closest row
+                var itemId = row.data('id'); // Get the SaleInvoiceItem ID from the row
+
+                // Basic validation for selecting a valid buyer
+                if (selectedBuyerId === "") {
+                    alert('Please select a buyer.');
+                    return;
+                }
+
+                // Make AJAX request to update the SaleInvoiceItem with the selected buyer
+                $.ajax({
+                    url: '@Url.Action("UpdateBuyerId", "SaleInvoices")', // Change to the appropriate controller and action
+                    type: 'POST',
+                    data: {
+                        itemId: itemId,
+                        buyerId: selectedBuyerId
+                    },
+                    success: function (response) {
+                        // You can handle the success response here if needed
+                    },
+                    error: function (error) {
+                        alert('Error updating buyer: ' + error.responseText);
+                    }
+                });
+            });
+
+            // Function to confirm delete for Invoice
+            window.InvoiceconfirmDeleteForInvoice = function (InvoiceId) {
+                InvoiceIdToDelete = InvoiceId; // Store the invoice ID to delete
+                $('#InvoiceconfirmDeleteModal').modal('show'); // Show the confirmation modal
+            }
+
+            // Function to confirm delete for item
+            window.InvoiceconfirmDeleteForItem = function (itemId) {
+                itemIdToDelete = itemId; // Store the item ID to delete
+                $('#confirmDeleteModal').modal('show'); // Show the confirmation modal
+            }
+
+            // Handle Invoice delete confirmation
+            $('#InvoiceconfirmDeleteButton').on('click', function () {
+                // Make AJAX request to delete the invoice
+                $.ajax({
+                    url: '@Url.Action("DeleteInvoice")', // Adjust the action name as necessary
+                    type: 'POST',
+                    data: {
+                        id: InvoiceIdToDelete // Use the stored ID for deletion
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            window.location.href = response.redirectUrl; // Redirect to the index page
+                        } else {
+                            alert('Error deleting Invoice: ' + response.message);
+                        }
+                    },
+                    error: function (error) {
+                        alert('Error deleting Invoice: ' + error.responseText);
+                    }
+                });
+
+                $('#InvoiceconfirmDeleteModal').modal('hide'); // Hide the modal after the request
+            });
+
+            // Handle Item delete confirmation
+            $('#confirmDeleteButton').on('click', function () {
+                // Make AJAX request to delete the item
+                      $.ajax({
+                    url: '@Url.Action("DeleteItem")', // Adjust the action name as necessary
+                        type: 'POST',
+                        data: {
+                            id: itemIdToDelete // Use the stored ID for deletion
+                        },
+                        success: function (response) {
+                            if (response.success) {
+                                alert(response.message); // Success message
+                                window.location.reload(); // Optional redirect
+                            } else {
+                                alert('Error: ' + response.message); // Error message
+                            }
+                        },
+                        error: function (error) {
+                            alert('Error deleting Item: ' + error.responseText);
+                        }
+                    });
+
+                $('#confirmDeleteModal').modal('hide'); // Hide the modal after the request
+            });
+        });
+    </script>
+
+
+}
+
+

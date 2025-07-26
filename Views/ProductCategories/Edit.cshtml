@@ -1,33 +1,51 @@
 ﻿@model ERManager.Models.ProductCategory
 
-@{
-    ViewData["Title"] = "Edit";
-}
-
-<h1>Edit</h1>
-
-<h4>ProductCategory</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="container-fluid">
+    <!-- Page title box -->
+    <div class="page-title-box">
+        <ol class="breadcrumb float-right">
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Greeva</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Forms</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">لیست</a></li>
+            <li class="breadcrumb-item active">نوێکردنەوە جۆری کاڵا</li>
+        </ol>
+        <h4 class="page-title">نوێکردنەوە جۆری کاڵا</h4>
     </div>
-</div>
+    <!-- End page title box -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card-box">
+                <h4 class="header-title m-t-0">جۆری كاڵا</h4>
+                <p class="text-muted font-14 m-b-20">
+                   نوێکردنەوە جۆری کاڵا
+                </p>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <!-- Notes -->
+                    <div class="form-group mb-3">
+                        <label asp-for="Name" class="control-label font-16">@Html.DisplayNameFor(model => model.Name)</label>
+                        <input asp-for="Name" class="form-control form-control-lg"
+                            placeholder="ناو" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-group mb-2">
+                        <input type="submit" value="نوێکردنەوە" class="btn btn-primary " />
+                        <a aps-aria="" asp-controller="ProductCategories" asp-action="Index"class="btn btn-info "> گەڕانەوە</a>
+
+                    </div>
+
+                </form>
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+
+
+    </div>
+    <!-- end row -->
+</div> <!-- end container-fluid-->
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

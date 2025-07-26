@@ -1,16 +1,18 @@
 ﻿using ERManager.Data;
 using ERManager.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ERManager.Controllers
 {
+    [Authorize(Roles = "Admin,User")]
     public class ExpensesCategoriesController : Controller
     {
         private readonly ERManagerContext _context;
         public ExpensesCategoriesController(ERManagerContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         // GET: ExpensesCategories
@@ -134,13 +136,31 @@ namespace ERManager.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var expensesCategory = await _context.ExpensesCategory.FindAsync(id);
-            if (expensesCategory != null)
+            if (expensesCategory == null)
             {
-                _context.ExpensesCategory.Remove(expensesCategory);
+                // If contact is not found, redirect to the Index page with an error message
+                TempData["ErrorMessage"] = "Contact not found or already deleted.";
+                return RedirectToAction(nameof(Index));
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.ExpensesCategory.Remove(expensesCategory);
+                await _context.SaveChangesAsync();
+
+                // Optionally set a success message to notify the user
+                TempData["SuccessMessage"] = "expensesCategory deleted successfully.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (optional)
+                // _logger.LogError(ex, "Error deleting contact with ID {ContactId}", id);
+
+                // Set an error message to show on the error page
+                TempData["ErrorMessage"] = "An error occurred while deleting the expensesCategory.";
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         private bool ExpensesCategoryExists(int id)

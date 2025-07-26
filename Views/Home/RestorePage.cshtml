@@ -1,0 +1,81 @@
+﻿<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Restore Database</h5>
+            </div>
+            <div class="card-body">
+                <!-- File Input -->
+                <div class="mb-3">
+                    <label for="backupFileInput" class="form-label">Choose Backup File (.sql)</label>
+                    <input type="file" class="form-control" id="backupFileInput" accept=".sql">
+                </div>
+
+                <!-- Restore Button -->
+                <button id="restoreButton" class="btn btn-primary w-100">
+                    Restore Database
+                </button>
+
+                <!-- Status Message -->
+                <div id="statusMessage" class="mt-3 alert" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        document.getElementById('restoreButton').addEventListener('click', function () {
+            const fileInput = document.getElementById('backupFileInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                showMessage("No file selected.", "danger");
+                return;
+            }
+
+            // Validate file type
+            if (file.name.split('.').pop().toLowerCase() !== 'sql') {
+                showMessage("Invalid file type. Please select a .sql file.", "danger");
+                return;
+            }
+
+            // Prepare form data
+            const formData = new FormData();
+            formData.append('backupFile', file);
+
+            // Show loading state
+            const restoreButton = document.getElementById('restoreButton');
+            restoreButton.disabled = true;
+            restoreButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Restoring...';
+
+            // Send the file to the server
+            fetch('/Home/RestoreDatabase', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage("Database restored successfully!", "success");
+                } else {
+                    showMessage("Restore failed: " + data.message, "danger");
+                }
+            })
+            .catch(error => {
+                showMessage("Error: " + error.message, "danger");
+            })
+            .finally(() => {
+                // Reset button state
+                restoreButton.disabled = false;
+                restoreButton.innerHTML = 'Restore Database';
+            });
+        });
+
+        function showMessage(message, type) {
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.innerText = message;
+            statusMessage.className = `alert alert-${type} mt-3`;
+            statusMessage.style.display = 'block';
+        }
+    </script>
+}

@@ -102,3 +102,34 @@ File: Main Css File
 @import "pages/timeline";
 /* ===== 18. Pricing ===== */
 @import "pages/pricing";
+
+
+
+
+///////////
+.purchase-invoice {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.items-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.items-table th, .items-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+.footer {
+    margin-top: 20px;
+    text-align: right;
+}

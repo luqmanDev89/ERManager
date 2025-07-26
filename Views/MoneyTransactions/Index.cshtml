@@ -4,68 +4,183 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="container-fluid">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Amount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TransactionType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdateAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Treasury)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Currency)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TransactionType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdateAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Treasury.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Password)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Currency.Code)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TransactionId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TransactionId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TransactionId">Delete</a>
-            </td>
-        </tr>
+    <!-- Page title box -->
+    <div class="page-title-box">
+        <ol class="breadcrumb float-right">
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Greeva</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Tables</a></li>
+            <li class="breadcrumb-item active">هاتوو ڕۆشتوو</li>
+        </ol>
+        <h4 class="page-title">هاتوو ڕۆشتوو</h4>
+    </div>
+    <!-- End page title box -->
+    <div class="row font-16">
+        <div class="col-md-3 mb-4">
+            <div class="card border-secondary shadow-sm" style="background-color: rgb(255, 255, 255);">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div class="text-left">
+                        <h5 class="card-title display-6 font-weight-bold mb-1">کۆی هاتوو</h5>
+                        <p class="card-text text-dark text-warning font-weight-bold display-5 mb-1">@ViewBag.totalIn.ToString("N0")</p>
+                        <p class="text-sm text-muted">In</p>
+                    </div>
+                    <i class="mdi mdi-chart-areaspline" style="font-size: 2rem; color: #007bff;"></i>
+                </div>
+            </div> <!-- end card-box-->
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card border-secondary shadow-sm" style="background-color: rgb(255, 245, 220);">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div class="text-left">
+                        <h5 class="card-title display-6 font-weight-bold mb-1">کۆی دەرچوو</h5>
+                        <p class="card-text text-dark text-warning font-weight-bold display-5 mb-1">@ViewBag.totalOut.ToString("N0")</p>
+                        <p class="text-sm text-muted">Out</p>
+                    </div>
+                    <i class="mdi mdi-chart-areaspline" style="font-size: 2rem; color: #007bff;"></i>
+                </div>
+            </div> <!-- end card-box-->
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card border-secondary shadow-sm" style="background-color: rgb(220, 255, 220);">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div class="text-left">
+                        <h5 class="card-title display-6 font-weight-bold mb-1">تێکڕای </h5>
+                        <p class="card-text text-dark text-warning font-weight-bold display-5 mb-1">@ViewBag.total.ToString("N0")</p>
+                        <p class="text-sm text-muted">Totalling</p>
+                    </div>
+                    <i class="mdi mdi-chart-areaspline" style="font-size: 2rem; color: #007bff;"></i>
+                </div>
+            </div> <!-- end card-box-->
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card border-secondary shadow-sm" style="background-color: rgb(220, 220, 255);">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div class="text-left">
+                        <h5 class="card-title display-6 font-weight-bold mb-1">ژمارەی </h5>
+                        <p class="card-text text-dark text-warning font-weight-bold display-5 mb-1">@Model.Count().ToString("N0")</p>
+                        <p class="text-sm text-muted">-</p>
+                    </div>
+                    <i class="mdi mdi-account-multiple" style="font-size: 2rem; color: #007bff;"></i>
+                </div>
+            </div> <!-- end card-box-->
+        </div>
+    </div>
+    <div class="row font-16">
+        <div class="col-12">
+            <div class="card-box">
+                <form method="get" id="filterForm">
+                    <div class="row">
+                        <!-- Treasury Name Filter -->
+                        <div class="col-sm-6 col-md-2 mb-2">
+                            <label for="Treasuries">قاسە</label>
+                            <select id="TreasuryId" name="TreasuryId" class="form-control select2">
+                                <option value="">هەموو</option>
+                                @foreach (var Treasury in ViewBag.Treasuries)
+                                {
+                                    <option value="@Treasury.TreasuryId" selected="@(ViewBag.TreasuryId == Treasury.TreasuryId ? "selected" : null)">
+                                        @Treasury.Name
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                        <!-- Transaction Type Filter -->
+                        <div class="col-sm-6 col-md-2 mb-2">
+                            <label for="TransactionType">جۆر</label>
+                            <select id="TransactionType" name="TransactionType" class="form-control select2">
+                                <option value="">هەموو</option>
+                                <option value="In" selected="@(ViewBag.TransactionType == "In" ? "selected" : null)">In</option>
+                                <option value="Out" selected="@(ViewBag.TransactionType == "Out" ? "selected" : null)">Out</option>
+                            </select>
+                        </div>
+
+                        <!-- Date Range Filter -->
+                        <div class="col-sm-6 col-md-2 mb-2">
+                            <label for="startDate">لە بەرواری</label>
+                            <input type="date" id="startDate" value="@ViewBag.startDate?.ToString("yyyy-MM-dd")" name="startDate" class="form-control" />
+                        </div>
+                        <div class="col-sm-6 col-md-2 mb-2">
+                            <label for="endDate">بۆ بەرواری</label>
+                            <input type="date" id="endDate" value="@ViewBag.endDate?.ToString("yyyy-MM-dd")" name="endDate" class="form-control" />
+                        </div>
+
+                        <!-- Notes Text Search -->
+                        <div class="col-sm-6 col-md-2 mb-2">
+                            <label for="Notes">گەڕان</label>
+                            <input type="text" id="Notes" name="Notes" value="@ViewBag.Notes" placeholder="گەڕان لە تێبینی" class="form-control" />
+                        </div>
+
+                        <!-- Filter Button -->
+                        <div class="col-sm-6 col-md-2 mb-2">
+                            <label>&nbsp;</label>
+                            <button type="submit" class="btn btn-primary form-control">گەڕان</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card-box">
+                <div class="table-rep-plugin">
+                    <div class="table-responsive">
+                        <table id="tech-companies-1" class="table table-bordered table-striped">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>@Html.DisplayNameFor(model => model.TreasuryId)</th>
+                                    <th data-priority="1">@Html.DisplayNameFor(model => model.Treasury)</th>
+                                    <th data-priority="1">@Html.DisplayNameFor(model => model.TransactionType)</th>
+                                    <th data-priority="3">@Html.DisplayNameFor(model => model.Amount)</th>
+                                    <th data-priority="1">@Html.DisplayNameFor(model => model.Notes)</th>
+                                    <th data-priority="1">@Html.DisplayNameFor(model => model.CreatedAt)</th>
+                                    <th data-priority="3">@Html.DisplayNameFor(model => model.UpdateAt)</th>
+                                    <th data-priority="3">@Html.DisplayNameFor(model => model.User)</th>
+                                    <th data-priority="6">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <th>@item.TransactionId</th>
+                                        <th>@Html.DisplayFor(modelItem => item.Treasury.Name)</th>
+                                        <th>@Html.DisplayFor(modelItem => item.TransactionType)</th>
+                                        <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Notes)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.CreatedAt)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.UpdateAt)</td>
+                                        <td>@item.User?.UserName</td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a asp-action="Edit" asp-route-id="@item.TransactionId" class="btn btn-sm btn-primary">نوێکردنەوە</a>
+                                                <form asp-action="Delete" asp-route-id="@item.TransactionId" method="post" style="display:inline;" onsubmit="return confirmDelete();">
+                                                    <button type="submit" class="btn btn-danger btn-sm">سڕینەوە</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div> <!-- end table-responsive -->
+                </div> <!-- table-rep-plugin -->
+
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+    </div> <!-- end row -->
+</div> <!-- end container-fluid -->
+@section Scripts {
+
+    <!-- Responsive table -->
+    <script src="~/assets/libs/RWD-Table-Patterns/js/rwd-table.min.js" asp-append-version="true"></script>
+
+                   <script>
+                    function confirmDelete() {
+                        return confirm("ئایا دڵنیایت لە سڕینەوەی ئەم  مەسروفە؟");
+                    }
+                   </script>
+
 }
-    </tbody>
-</table>

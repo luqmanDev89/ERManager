@@ -7,136 +7,143 @@
 
             <ul class="metismenu" id="side-menu">
 
-                <li class="menu-title">Navigation</li>
+                <li class="menu-title">مینو</li>
 
                 <li>
-                    <a href="index.html">
-                        <i class="mdi mdi-view-dashboard"></i> <span> Dashboard </span>
+                    <a asp-controller="Home" asp-action="Index">
+                        <i class="mdi mdi-view-dashboard"></i> <span> سەرەکی </span>
                     </a>
                 </li>
-
                 <li>
-                    <a href="javascript: void(0);"><i class="mdi mdi-atom"></i> <span> UI Elements </span> <span class="menu-arrow"></span></a>
+                    <a href="javascript: void(0);"><i class="fas fa-cart-arrow-down"></i> <span> فڕۆشتن </span> <span class="menu-arrow"></span></a>
                     <ul class="nav-second-level" aria-expanded="false">
-                        <li><a href="ui-buttons.html">Buttons</a></li>
-                        <li><a href="ui-modals.html">Modals</a></li>
-                        <li><a href="ui-tabs.html">Tabs & Accordions</a></li>
-                        <li><a href="ui-notifications.html">Notifications</a></li>
-                        <li><a href="ui-cards.html">Cards</a></li>
-                        <li><a href="ui-grid.html">Grid</a></li>
-                        <li><a href="ui-general.html">General</a></li>
-                        <li><a href="ui-typography.html">Typography</a></li>
-                        <li><a href="ui-checkbox-radio.html">Checkbox & Radio</a></li>
-                        <li><a href="ui-progress.html">Progress</a></li>
-                        <li><a href="ui-sweetalerts.html">Sweet Alerts</a></li>
-                        <li><a href="ui-range-slider.html">Range Slider</a></li>
-                        <li><a href="ui-ribbons.html">Ribbons</a></li>
-                        <li><a href="ui-materialdesign.html">Material Design</a></li>
-                        <li><a href="ui-simpleline.html">Simple Line</a></li>
-                        <li><a href="ui-dripicons.html">Dripicons</a></li>
+                        <li><a asp-controller="SaleInvoices" asp-action="SaleDashboard">سەرەکی</a></li>
+                        <li><a asp-controller="SaleInvoices" asp-action="Create">فڕۆشتنی نوێ</a></li>
+                        <li><a asp-controller="SaleInvoices" asp-action="Index"> لیستی پسوولەکان </a></li>
+                        <li><a asp-controller="SaleInvoices" asp-action="Index">وردەکاری فڕۆشتن</a></li>
+                        <li><a asp-controller="SaleInvoices" asp-action="Profit">قازانج</a></li>
+
                     </ul>
                 </li>
 
                 <li>
-                    <a href="javascript: void(0);"><i class="mdi mdi-email-outline"></i><span> Email </span> <span class="menu-arrow"></span></a>
+                    <a href="javascript: void(0);"><i class="fas fa-shopping-cart"></i> <span> کڕین </span> <span class="menu-arrow"></span></a>
                     <ul class="nav-second-level" aria-expanded="false">
-                        <li><a href="email-inbox.html">Inbox</a></li>
-                        <li><a href="email-read.html">Read Email</a></li>
-                        <li><a href="email-compose.html">Compose Email</a></li>
+                        <li><a asp-controller="PurchaseInvoices" asp-action="PurchaseDashboard">سەرەکی</a></li>
+                        <li><a asp-controller="PurchaseInvoices" asp-action="Create">کڕینی نوێ</a></li>
+                        <li><a asp-controller="PurchaseInvoices" asp-action="Index"> لیستی پسوولەکان </a></li>
+                        <li><a asp-controller="PurchaseInvoices" asp-action="InvoiceListDetails">وردەکاری کڕین</a></li>
+
                     </ul>
                 </li>
 
                 <li>
-                    <a href="calendar.html">
-                        <i class="mdi mdi-calendar"></i> <span> Calendar </span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="javascript: void(0);"><i class="mdi mdi-chart-donut-variant"></i><span> Charts </span> <span class="menu-arrow"></span></a>
+                    <a href="javascript: void(0);"><i class="mdi dripicons-to-do"></i><span> ژمێریاری </span> <span class="menu-arrow"></span></a>
                     <ul class="nav-second-level" aria-expanded="false">
-                        <li><a href="chart-flot.html">Flot Chart</a></li>
-                        <li><a href="chart-chartist.html">Chartist Chart</a></li>
-                        <li><a href="chart-chartjs.html">Chartjs Chart</a></li>
-                        <li><a href="chart-knob.html">Jquery Knob</a></li>
-                        <li><a href="chart-sparkline.html">Sparkline Chart</a></li>
+                        <li><a asp-controller="ContactPayments" asp-action="Index">سەرەکی</a></li>
+                        <li><a asp-controller="ContactPayments" asp-action="Create">پارەداه</a></li>
+                        <li><a asp-controller="ContactPayments" asp-action="CreateInFlow">پارەوەرگرین</a></li>
+                        <li><a asp-controller="ContactPayments" asp-action="Index">لیست</a></li>
+                        <li><a asp-controller="SaleInvoices" asp-action="CapitalSheet">سەرمایە</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);"><i class="fas fa-users"></i> <span> بازرگان </span><span class="menu-arrow"></span></a>
+                    <ul class="nav-second-level" aria-expanded="false">
+                        <li><a asp-controller="Contacts" asp-action="Create">زیادکردن</a></li>
+                        <li><a asp-controller="Contacts" asp-action="Index">لیست </a></li>
                     </ul>
                 </li>
 
                 <li>
-                    <a href="javascript: void(0);"><i class="mdi mdi-file-document-box"></i><span class="badge badge-danger float-right">6</span> <span> Forms </span></a>
+                    <a href="javascript: void(0);"><i class="mdi dripicons-wallet"></i> <span> مەسروفات </span> <span class="menu-arrow"></span></a>
                     <ul class="nav-second-level" aria-expanded="false">
-                        <li><a href="form-elements.html">Form Elements</a></li>
-                        <li><a href="form-advanced.html">Form Advanced</a></li>
-                        <li><a href="form-validation.html">Form Validation</a></li>
-                        <li><a href="form-wizard.html">Form Wizard</a></li>
-                        <li><a href="form-summernote.html">Summernote</a></li>
-                        <li><a href="form-upload.html">Form Upload</a></li>
+                        <li><a asp-area="" asp-controller="Expenses" asp-action="Dashboard">سەرەکی</a></li>
+                        <li><a asp-area="" asp-controller="Expenses" asp-action="Create">زیادکردن</a></li>
+                        <li><a asp-area="" asp-controller="Expenses" asp-action="Index">لیست</a></li>
+                        <li><a asp-area="" asp-controller="ExpensesCategories" asp-action="Create">زیادکردنی جۆر</a></li>
+                        <li><a asp-area="" asp-controller="ExpensesCategories" asp-action="Index">لیستی جۆر</a></li>
+
+
+
+                    </ul>
+                </li>
+
+
+
+
+                <li>
+                    <a href="javascript: void(0);"><i class="fas fa-boxes"></i><span> کاڵا </span> <span class="menu-arrow"></span></a>
+                    <ul class="nav-second-level" aria-expanded="false">
+                        <li><a asp-controller="Products" asp-action="Create">زیادکردن</a></li>
+                        <li><a asp-controller="Products" asp-action="Index">لیست</a></li>
+                        <li>
+                            <a href="javascript: void(0);"><i class="fas fa-th-list"></i><span> جۆر </span> <span class="menu-arrow"></span></a>
+                            <ul class="nav-second-level" aria-expanded="false">
+                                <li><a asp-controller="ProductCategories" asp-action="Create">زیادکردن</a></li>
+                                <li><a asp-controller="ProductCategories" asp-action="Index">لیست</a></li>
+
+                            </ul>
+
+                        </li>
+
                     </ul>
                 </li>
 
                 <li>
-                    <a href="javascript: void(0);"><i class="mdi mdi-filter-variant"></i> <span> Tables </span> <span class="menu-arrow"></span></a>
+                    <a href="javascript: void(0);"><i class="fas fa-money-check-alt"></i> <span> قاسە </span> <span class="menu-arrow"></span></a>
                     <ul class="nav-second-level" aria-expanded="false">
-                        <li><a href="tables-basic.html">Basic Tables</a></li>
-                        <li><a href="tables-datatable.html">Data Tables</a></li>
-                        <li><a href="tables-responsive.html">Responsive Tables</a></li>
-                    </ul>
-                </li>
+                        <li><a asp-controller="Treasuries" asp-action="Dashboard">سەرەکی</a></li>
+                        <li><a asp-controller="Treasuries" asp-action="Create">زیادکردن</a></li>
+                        <li><a asp-controller="Treasuries" asp-action="Index"> لیست </a></li>
 
-                <li class="menu-title">More</li>
-
-                <li>
-                    <a href="javascript: void(0);"><i class="mdi mdi-map"></i> <span> Maps </span> <span class="menu-arrow"></span></a>
-                    <ul class="nav-second-level" aria-expanded="false">
-                        <li><a href="maps-google.html">Google Maps</a></li>
-                        <li><a href="maps-vector.html">Vector Maps</a></li>
                     </ul>
+
                 </li>
 
                 <li>
-                    <a href="javascript: void(0);"><i class="mdi mdi-buffer"></i><span> Authentication </span> <span class="menu-arrow"></span></a>
+                    <a href="javascript: void(0);"><i class="fas fa-balance-scale"></i> <span> باڵانسی قاسە </span> <span class="menu-arrow"></span></a>
                     <ul class="nav-second-level" aria-expanded="false">
-                        <li><a href="auth-login.html">Log In</a></li>
-                        <li><a href="auth-register.html">Register</a></li>
-                        <li><a href="auth-recoverpassword.html">Recover Password</a></li>
-                        <li><a href="auth-lock-screen.html">Lock Screen</a></li>
-                        <li><a href="auth-404.html">Error 404</a></li>
-                        <li><a href="auth-500.html">Error 500</a></li>
+                        <li><a asp-controller="MoneyTransactions" asp-action="Create">زیادکردن</a></li>
+                        <li><a asp-controller="MoneyTransactions" asp-action="CreateOut"> ڕاکێشان </a></li>
+                        <li><a asp-controller="MoneyTransactions" asp-action="Index">لیست</a></li>
+                        <li>
+                            <a href="javascript: void(0);"><i class="mdi mdi-filter-variant"></i> <span>گواستنەوەی ڕەسید</span> <span class="menu-arrow"></span></a>
+                            <ul class="nav-second-level" aria-expanded="false">
+                                <li><a asp-controller="TreasuryMoneyTransfers" asp-action="Create">زیادکردن</a></li>
+                                <li><a asp-controller="TreasuryMoneyTransfers" asp-action="Index"> لیست </a></li>
+                                <li><a asp-controller="TreasuryMoneyTransfers" asp-action="Index">سەرەکی</a></li>
+
+                            </ul>
+                        </li>
                     </ul>
                 </li>
 
                 <li>
-                    <a href="javascript:void(0);"><i class="mdi mdi-google-pages"></i> <span> Pages </span> <span class="menu-arrow"></span></a>
+                    <a href="javascript:void(0);"><i class="fas fa-warehouse"></i> <span> کۆگا </span> <span class="menu-arrow"></span></a>
                     <ul class="nav-second-level" aria-expanded="false">
-                        <li><a href="pages-invoice.html">Invoice</a></li>
-                        <li><a href="pages-pricing.html">Pricing</a></li>
-                        <li><a href="pages-starter.html">Starter</a></li>
-                        <li><a href="pages-timeline.html">Timeline</a></li>
-                        <li><a href="pages-faq.html">FAQs</a></li>
+                        <li><a asp-controller="Products" asp-action="Stock">لیست</a></li>
                     </ul>
                 </li>
-                @*
-                <!-- <li>
-                <a href="javascript: void(0);"><i class="mdi mdi-multiplication"></i> <span> Multi Level </span> <span class="menu-arrow"></span></a>
-                <ul class="nav-second-level nav" aria-expanded="false">
-                <li><a href="javascript: void(0);">Level 1.1</a></li>
-                <li><a href="javascript: void(0);" aria-expanded="false">Level 1.2 <span class="menu-arrow"></span></a>
-                <ul class="nav-third-level nav" aria-expanded="false">
-                <li><a href="javascript: void(0);">Level 2.1</a></li>
-                <li><a href="javascript: void(0);">Level 2.2</a></li>
-                </ul>
-                </li>
-                </ul>
-                </li> --> *@
-
                 <li>
-                    <a href="javascript: void(0);"><i class="mdi mdi-filter-variant"></i> <span> مەسروفات </span> <span class="menu-arrow"></span></a>
+                    <a href="javascript: void(0);"><i class="fas fa-users"></i> <span> بەکارهێنەران </span> <span class="menu-arrow"></span></a>
                     <ul class="nav-second-level" aria-expanded="false">
-                        <li><a asp-area="" asp-controller="ExpensesCategories" asp-action="Create">زیادکردن</a></li>
-                        <li><a asp-area="" asp-controller="ExpensesCategories" asp-action="Index">جۆرەکان</a></li>
+                        <li><a asp-controller="Users" asp-action="Create">زیادکردن</a></li>
+                        <li><a asp-controller="Users" asp-action="Index"> لیست </a></li>
+
                     </ul>
+
                 </li>
+                <li>
+                    <a href="javascript: void(0);"><i class="fas fa-users"></i> <span> ڕێخستن </span> <span class="menu-arrow"></span></a>
+                    <ul class="nav-second-level" aria-expanded="false">
+                        <li><a asp-controller="Home" asp-action="BackupDatabase">هەڵگرتن</a></li>
+                        <li><a id="restoreButton" asp-controller="Home" asp-action="RestorePage"> هێنانەوە </a></li>
+                        
+                    </ul>
+
+                </li>
+
 
             </ul>
 
@@ -147,5 +154,6 @@
 
     </div>
     <!-- Sidebar -left -->
-
+   
 </div>
+

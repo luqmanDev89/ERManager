@@ -1,0 +1,161 @@
+﻿@model IEnumerable<ERManager.ViewModels.Products.ProductStockViewModel>
+
+@{
+    ViewData["Title"] = "Product Stock";
+}
+
+<div class="container-fluid">
+    <div class="page-title-box">
+        <ol class="breadcrumb float-right">
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Home</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0);">کۆگا</a></li>
+            <li class="breadcrumb-item active">کۆگا</li>
+        </ol>
+        <h4 class="page-title">Product Stock Overview</h4>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row font-16">
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card border-secondary shadow-sm">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div class="text-left">
+                        <h5 class="card-title font-weight-bold mb-1">کڕین</h5>
+                        <p class="card-text text-dark text-warning font-weight-bold h4 mb-1">@ViewBag.TotalPurchase.ToString("N0")</p>
+                        <p class="text-muted">کۆی گشتی بەرهەمە کڕاوەکان</p>
+                    </div>
+                    <i class="fas fa-box-open fa-2x text-primary"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card border-secondary shadow-sm">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div class="text-left">
+                        <h5 class="card-title font-weight-bold mb-1">فڕۆشتن</h5>
+                        <p class="card-text text-dark text-warning font-weight-bold h4 mb-1">@ViewBag.TotalSale.ToString("N0")</p>
+                        <p class="text-muted">کۆی گشتی بەرهەمە فرۆشراوەکان</p>
+                    </div>
+                    <i class="fas fa-shopping-cart fa-2x text-primary"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card border-secondary shadow-sm">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div class="text-left">
+                        <h5 class="card-title font-weight-bold mb-1">کۆگا</h5>
+                        <p class="card-text text-dark text-warning font-weight-bold h4 mb-1">@ViewBag.TotalStock.ToString("N0")</p>
+                        <p class="text-muted">کۆی گشتی بەرهەمەکان بەردەستە</p>
+                    </div>
+                    <i class="fas fa-warehouse fa-2x text-primary"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card border-secondary shadow-sm">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div class="text-left">
+                        <h5 class="card-title font-weight-bold mb-1">دانە</h5>
+                        <p class="card-text text-dark text-warning font-weight-bold h4 mb-1">@Model.Count().ToString("N0")</p>
+                        <p class="text-muted">ژمارەی کاڵاکان</p>
+                    </div>
+                    <i class="fas fa-info-circle fa-2x text-primary"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="row font-16">
+        <div class="col-12">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <form method="get" id="filterForm">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-6 mb-3">
+                                <label for="Category" class="font-weight-bold">بەش</label>
+                                <select id="Category" name="categoryId" class="form-control">
+                                    <option value="">All Categories</option>
+                                    @foreach (var category in ViewBag.categories)
+                                    {
+                                        <option value="@category.Value" >@category.Text</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-6 col-sm-6 mb-3">
+                                <label for="ProductName" class="font-weight-bold">گەڕان بە ناوی کاڵا</label>
+                                <input type="text" id="ProductName" name="productName" value="@ViewBag.ProductName" placeholder="گەڕان بە ناوی کاڵا" class="form-control" />
+                            </div>
+                            <div class="col-md-2 col-sm-12 mb-3 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary btn-block">گەڕان</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Stock Table -->
+    <div class="row font-16">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="stock-table" class="table table-bordered table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>کاڵا</th>
+                                    <th>بڕی کڕاو</th>
+                                    <th>بڕی فڕۆشراو</th>
+                                    <th>بڕی کۆگا</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr class="stock-row" data-netstock="@item.NetStock">
+                                        <td>@item.ProductName</td>
+                                        <td>@item.PurchaseQuantity.ToString("N0")</td>
+                                        <td>@item.SaleQuantity.ToString("N0")</td>
+                                        <td>@item.NetStock.ToString("N0")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Apply background colors based on stock quantity
+            document.querySelectorAll('.stock-row').forEach(row => {
+                const netStock = parseInt(row.getAttribute('data-netstock'), 10);
+
+                if (!isNaN(netStock)) { // Ensure netStock is a valid number
+                    if (netStock > 100) {
+                        row.style.backgroundColor = '#d4edda'; // Green for high stock
+                    } else if (netStock > 50) {
+                        row.style.backgroundColor = '#fff3cd'; // Yellow for moderate stock
+                    } else if (netStock > 0) {
+                        row.style.backgroundColor = '#f8d7da'; // Light red for low stock
+                    } else {
+                        row.style.backgroundColor = '#f5c6cb'; // Dark red for out of stock
+                    }
+                } else {
+                    console.warn("Invalid net stock value on row:", row);
+                }
+            });
+        });
+    </script>
+}
+

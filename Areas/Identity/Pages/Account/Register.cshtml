@@ -1,0 +1,93 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h1 class="text-center text-primary mt-4">
+    <i class="fas fa-user-plus"></i> @ViewData["Title"]
+</h1>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <!-- Registration Form -->
+        <div class="col-md-6">
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="shadow p-4 rounded bg-light">
+                <h2 class="text-center text-secondary">Create a New Account</h2>
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                    <label asp-for="Input.Email"><i class="fas fa-envelope"></i> Email</label>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Password" type="password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                    <label asp-for="Input.Password"><i class="fas fa-lock"></i> Password</label>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.ConfirmPassword" type="password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                    <label asp-for="Input.ConfirmPassword"><i class="fas fa-lock"></i> Confirm Password</label>
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <select asp-for="Input.Role" class="form-select" aria-required="true">
+                        <option value="User">User</option>
+                        <option value="Admin">Admin</option>
+                        <!-- Add more roles here as needed -->
+                    </select>
+                    <label asp-for="Input.Role"><i class="fas fa-user-tag"></i> Role</label>
+                    <span asp-validation-for="Input.Role" class="text-danger"></span>
+                </div>
+
+                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">
+                    <i class="fas fa-user-check"></i> Register
+                </button>
+            </form>
+        </div>
+
+        <!-- External Login Section -->
+        <div class="col-md-6">
+            <section class="shadow p-4 rounded bg-light">
+                <h3 class="text-secondary text-center"><i class="fas fa-sign-in-alt"></i> Use Another Service</h3>
+                <hr />
+                @{
+                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                    {
+                        <div class="alert alert-warning">
+                            <p>
+                                There are no external authentication services configured. See this
+                                <a href="https://go.microsoft.com/fwlink/?LinkID=532715" target="_blank">
+                                    article
+                                </a> about setting up external authentication services.
+                            </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal text-center">
+                            <p>
+                                @foreach (var provider in Model.ExternalLogins!)
+                                {
+                                    <button type="submit" class="btn btn-outline-primary btn-block my-2" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                                        <i class="fab fa-@provider.Name.ToLower()"></i> @provider.DisplayName
+                                    </button>
+                                }
+                            </p>
+                        </form>
+                    }
+                }
+            </section>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+}

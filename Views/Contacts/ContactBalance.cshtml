@@ -1,0 +1,139 @@
+﻿@model IEnumerable<ERManager.ViewModels.Contacts.BalanceViewModel>
+
+<div class="container-fluid py-4">
+    <!-- Page title box -->
+    <div class="page-title-box mb-4">
+        <ol class="breadcrumb float-right">
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Greeva</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Tables</a></li>
+            <li class="breadcrumb-item active">بازرگان</li>
+        </ol>
+        <h4 class="page-title">بازرگان</h4>
+    </div>
+    <!-- End page title box -->
+
+    <div class="row g-4">
+        <!-- Contact Info and Filters -->
+        <div class="col-lg-3 col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-center mb-3">
+                        <i class="fas fa-user text-secondary"></i> زانیاری بازگان
+                    </h5>
+                    <form asp-action="ContactBalance" asp-controller="Contacts" method="get">
+                        <div class="mb-3">
+                            <label for="contactSelect" class="form-label">کەشف حسابی</label>
+                            <select id="contactSelect" name="contactId" class="form-select select2">
+                                <option value="">کەشف حسابی</option>
+                                @foreach (var contact in ViewBag.Contacts)
+                                {
+                                    <option selected="@(contact.Id == ViewBag.contactId ? true : false)" value="@contact.Id">@contact.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="card border-0 shadow-sm rounded mb-4 bg-white">
+                            <div class="card-body p-4">
+                                <h6 class="text-center">زانیاری بازرگان</h6>
+                                <!-- Name -->
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-user fa-lg text-primary me-3"></i>
+                                    <p class="mb-0 text-muted"><a asp-action="Index">@ViewBag.selectedContact?.Name</a> </p>
+                                </div>
+                                <!-- Mobile -->
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-phone-alt fa-lg text-success me-3"></i>
+                                    <p class="mb-0"><a href="tel:@ViewBag.selectedContact?.Phone" class="text-muted">@ViewBag.selectedContact?.Phone</a></p>
+                                </div>
+                                <!-- Contact Type -->
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-address-book fa-lg text-info me-3"></i>
+                                    <p class="mb-0 text-muted">@ViewBag.selectedContact?.ContactType</p>
+                                </div>
+                                <!-- Email -->
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-envelope fa-lg text-warning me-3"></i>
+                                    <p class="mb-0 text-muted">@ViewBag.selectedContact?.Email</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="startDate" class="form-label">لە بەرواری</label>
+                            <input type="date" id="startDate" name="startDate" value="@ViewBag.startDate?.ToString("yyyy-MM-dd")" class="form-control" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="endDate" class="form-label">بۆ بەرواری</label>
+                            <input type="date" id="endDate" name="endDate" value="@ViewBag.endDate?.ToString("yyyy-MM-dd")" class="form-control" required />
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">گەڕان</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Balance Summary Cards -->
+        <div class="col-lg-9 col-md-12">
+            <div class="row g-4">
+                @* Loop through summary data *@
+                @foreach (var summary in new[] {
+                new { Title = "باڵانسی پێشووتر", Value = ViewBag.openingBalance, IconClass = "fa-wallet", Description = "باڵانسی پێشەم بەروارە" },
+                new { Title = "قەرزارم (مدین)", Value = ViewBag.TotalSales, IconClass = "fa-shopping-cart", Description = "کۆی پسوولەی فڕۆشتن لەم بەروارەدا" },
+                new { Title = "قەرزارە(دائن)", Value = ViewBag.TotalPayments, IconClass = "fa-cash-register", Description = "کۆی پارەوی وەرگیراو لەم بەروارەدا" },
+                new { Title = "باڵانس", Value = ViewBag.CurrentBalance, IconClass = "fa-balance-scale", Description = "As of the end date" }
+                })
+                {
+                    <div class="col-12 col-md-6 col-lg-3 mb-3">
+                        <div class="card border-primary shadow-sm h-100">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-primary">@summary.Title</h6>
+                                    <h4 class="text-warning">@summary.Value.ToString("N0")</h4>
+                                    <small class="text-muted">@summary.Description</small>
+                                </div>
+                                <i class="fas @summary.IconClass fa-2x text-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+
+            <!-- Transactions Table -->
+            <div class="card mt-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-center mb-3">مێژووی مامەڵەکان</h5>
+                    <div class="table-responsive">
+                        <table id="balance-table" class="table table-hover table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Date</th>
+                                    <th>Note</th>
+                                    <th>Type</th>
+                                    <th class="text-end">قەرزارە(دائن)</th>
+                                    <th class="text-end">قەرزارم (مدین)</th>
+                                    <th class="text-end">بەڵانس</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var transaction in Model)
+                                {
+                                    <tr>
+                                        <td>@transaction.InvoiceId</td>
+                                        <td>@transaction.CreatedAt.ToShortDateString()</td>
+                                        <td>@transaction.Description</td>
+                                        <td>@transaction.Type</td>
+                                        <td class="text-end text-success">@transaction.creditor.ToString("N0")</td>
+                                        <td class="text-end text-danger">@transaction.debtor.ToString("N0")</td>
+                                        <td class="text-end text-primary">@transaction.Balance.ToString("N0")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

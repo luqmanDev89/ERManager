@@ -1,0 +1,144 @@
+﻿@model ERManager.ViewModels.Purchases.PurchaseDashboardViewModel
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-9">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h4 class="header-title mb-0">جالاکی ئەمڕۆ</h4>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover mb-0" id="datatable">
+                        <thead>
+                            <tr>
+                                <th class="border-top-0">کۆد</th>
+                                <th class="border-top-0">بازرگان</th>
+                                <th class="border-top-0">کۆی پسوولە</th>
+                                <th class="border-top-0">بەروار</th>
+                                <th class="border-top-0">بەکارهێنەر</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Last20Purchases)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td> <a asp-action="ContactBalance" asp-controller="Contacts" asp-route-startDate="@DateTime.Now.Date.ToString("yyyy-MM-dd")" asp-route-endDate="@DateTime.Now.Date.AddMonths(1).ToString("yyyy-MM-dd")" asp-route-contactId="@item.Contact?.Id">@item.Contact?.Name</a></td>
+                                    <td>@item.PurchaseInvoiceItems.Sum(d => d.LineTotal).ToString("N2")</td>
+                                    <td>@item.CreatedAt</td>
+                                    <td>@item.User?.UserName</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div> <!-- end table-responsive -->
+            </div> <!-- end card-->
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h4 class="header-title mb-0">کۆتا پارەدان</h4>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover mb-0" id="datatable">
+                        <thead>
+                            <tr>
+                                <th class="border-top-0">کۆد</th>
+                                <th class="border-top-0">بازرگان</th>
+                                <th class="border-top-0">بڕ</th>
+                                <th class="border-top-0">بەروار</th>
+                                <th class="border-top-0">بەکارهێنەر</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Last20ContactPayments)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td> <a asp-action="ContactBalance" asp-controller="Contacts" asp-route-startDate="@DateTime.Now.Date.ToString("yyyy-MM-dd")" asp-route-endDate="@DateTime.Now.Date.AddMonths(1).ToString("yyyy-MM-dd")" asp-route-contactId="@item.Contact?.Id">@item.Contact?.Name</a></td>
+                                    <td>@item.Amount.ToString("N2")</td>
+                                    <td>@item.CreatedAt.ToShortDateString()</td>
+                                    <td>@item.User?.UserName</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div> <!-- end table-responsive -->
+            </div> <!-- end card -->
+        </div> <!-- end col -->
+
+        <div class="col-xl-3">
+            <div class="card bg-danger text-white mb-3">
+                <div class="card-header bg-danger">
+                    <h4 class="header-title  mb-0">کڕینی ئەمڕۆ</h4>
+                    <p class="mb-0">@DateTime.Now.ToLongDateString()</p>
+                </div>
+                <div class="card-body">
+                    <h2 class="font-weight-light">@Model.ToDayTotalPurchase.ToString("N0")</h2>
+                    <div class="pull-in margin-m-b-20">
+                        <canvas id="lineChart" height="122"></canvas>
+                    </div>
+                </div>
+            </div> <!-- end card -->
+
+            <div class="card bg-danger text-white mb-3">
+                <div class="card-header bg-danger">
+                    <h4 class="header-title mb-0">پارەدانی ئەمڕۆ</h4>
+                    <p class="mb-0">@DateTime.Now.ToLongDateString()</p>
+                </div>
+                <div class="card-body">
+                    <h2 class="font-weight-light">@Model.ToDayTotalPay.ToString("N0")</h2>
+                    <div class="pull-in margin-m-b-20">
+                        <canvas id="lineChartPay" height="122"></canvas>
+                    </div>
+                </div>
+            </div> <!-- end card -->
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h4 class="header-title mb-0">کۆی قەرز</h4>
+                </div>
+                <div class="card-body">
+                    <h2 class="font-weight-normal mb-2">@Model.TotalSupplierDebit.ToString("N0") <i class="mdi mdi-arrow-up text-success"></i></h2>
+                    <p class="text-muted">@DateTime.Now.ToLongDateString()</p>
+                    <div class="mb-3 chartjs-chart dash-doughnut">
+                        <canvas id="doughnut"></canvas>
+                    </div>
+                    <div>
+                        <p><i class="mdi mdi-stop-circle-outline text-success"></i> کۆی کڕین <span class="float-right font-weight-normal">@Model.totalPurchase.ToString("N0")</span></p>
+                        <p><i class="mdi mdi-stop-circle-outline text-danger"></i> کۆی پارەدان <span class="float-right font-weight-normal">@Model.totalPay.ToString("N0")</span></p>
+                        <p class="mb-0"><i class="mdi mdi-stop-circle-outline"></i> بڕی ماوە <span class="float-right font-weight-normal">@Model.TotalSupplierDebit.ToString("N0")</span></p>
+                    </div>
+                </div>
+            </div> <!-- end card -->
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h4 class="header-title mb-0">زۆرترین کڕین</h4>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover mb-0" id="datatable">
+                        <thead>
+                            <tr>
+                                <th class="border-top-0">بازرگان</th>
+                                <th class="border-top-0">بڕ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Top10Suppliers)
+                            {
+                                <tr>
+                                    <td>@item.Name</td>
+                                    <td>@item.TotalPurchases.ToString("N2")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div> <!-- end table-responsive -->
+            </div> <!-- end card -->
+        </div> <!-- end col -->
+    </div> <!-- end row -->
+</div>
+
+@section Scripts {
+    <!-- Include any additional scripts for charts -->
+}

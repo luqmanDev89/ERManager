@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ERManager.Data;
+﻿using ERManager.Data;
 using ERManager.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ERManager.Controllers
 {
+    [Authorize(Roles = "Admin,User")]
     public class ProductCategoriesController : Controller
     {
         private readonly ERManagerContext _context;
 
         public ProductCategoriesController(ERManagerContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         // GET: ProductCategories
@@ -117,6 +114,7 @@ namespace ERManager.Controllers
         }
 
         // GET: ProductCategories/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,18 +133,37 @@ namespace ERManager.Controllers
         }
 
         // POST: ProductCategories/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var productCategory = await _context.ProductCategories.FindAsync(id);
-            if (productCategory != null)
+            if (productCategory == null)
             {
-                _context.ProductCategories.Remove(productCategory);
+                // If contact is not found, redirect to the Index page with an error message
+                TempData["ErrorMessage"] = "productCategory not found or already deleted.";
+                return RedirectToAction(nameof(Index));
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.ProductCategories.Remove(productCategory);
+                await _context.SaveChangesAsync();
+
+                // Optionally set a success message to notify the user
+                TempData["SuccessMessage"] = "productCategory deleted successfully.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (optional)
+                // _logger.LogError(ex, "Error deleting contact with ID {ContactId}", id);
+
+                // Set an error message to show on the error page
+                TempData["ErrorMessage"] = "An error occurred while deleting the productCategory.";
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         private bool ProductCategoryExists(int id)

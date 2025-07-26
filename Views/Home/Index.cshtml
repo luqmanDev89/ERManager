@@ -1,466 +1,269 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model ERManager.ViewModels.Homes.HomePageViewModel
+ @using System.Globalization
+@{
+    ViewData["Title"] = "Dashboard";
 }
 
-                    <div class="row">
-                        <div class="col-xl-4">
+<div class="container-fluid p-4">
+    <!-- Overview Cards for Financial Metrics -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2 g-sm-3 mb-4">
+        @{
+            var cards = new[]
+            {
+        new { Title = "کڕین", Value = Model.TotalPurchase, Icon = "fas fa-file-invoice-dollar", Color = "success" },
+        new { Title = "فڕۆش", Value = Model.TotalSales, Icon = "fas fa-cash-register", Color = "primary" },
+        new { Title = "مەسروف", Value = Model.TotalExpenses, Icon = "fas fa-money-bill-wave", Color = "warning" },
+        new { Title = "پارەی وەرگیراو", Value = Model.ContactPaymentInflow, Icon = "fas fa-arrow-circle-down", Color = "success" },
+        new { Title = "پارەی دراو", Value = Model.ContactPaymentOutflow, Icon = "fas fa-arrow-circle-up", Color = "danger" },
+        new { Title = "هاتووی قاسە", Value = Model.MoneyTransactionIn, Icon = "fas fa-arrow-circle-down", Color = "success" },
+        new { Title = "دەرچووی قاسە", Value = Model.MoneyTransactionOut, Icon = "fas fa-arrow-circle-up", Color = "danger" }
+        };
+        }
 
-                            <div class="card-box">
-                                <div class="dropdown float-right">
-                                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">
-                                        <i class="mdi mdi-dots-horizontal"></i>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Settings</a>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Download</a>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Upload</a>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                    </div>
-                                </div>
-                                <h4 class="header-title">Daily Sales</h4>
-                                <p class="text-muted">March 26 - April 01</p>
-                                <div class="mb-3 mt-4">
-                                    <div class="float-right d-none d-xl-block">
-                                        <img src="assets/images/cards/visa.png" alt="user-card" height="28" />
-                                        <img src="assets/images/cards/master.png" alt="user-card" height="28" />
-                                        <img src="assets/images/cards/american-express.png" alt="user-card" height="28" />
-                                    </div>
-                                    <h2 class="font-weight-light">$8,459.56</h2>
-                                </div>
-                                <div class="chartjs-chart dash-sales-chart">
-                                    <canvas id="sales-chart"></canvas>
-                                </div>
-                            </div><!-- end card-box-->
-
-                            <div class="card-box widget-chart-one gradient-success bx-shadow-lg">
-                                <div class="float-left" dir="ltr">
-                                    <input data-plugin="knob" data-width="80" data-height="80" data-linecap=round
-                                           data-fgColor="#ffffff" data-bgcolor="rgba(255,255,255,0.2)" value="49" data-skin="tron" data-angleOffset="180"
-                                           data-readOnly=true data-thickness=".1" />
-                                </div>
-                                <div class="widget-chart-one-content text-right">
-                                    <p class="text-white mb-0 mt-2">Statistics</p>
-                                    <h3 class="text-white">$714</h3>
-                                </div>
-                            </div> <!-- end card-box-->
-
-                        </div> <!-- end col -->
-
-                        <div class="col-xl-4">
-                            <div class="card-box">
-                                <div class="dropdown float-right">
-                                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">
-                                        <i class="mdi mdi-dots-horizontal"></i>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Settings</a>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Download</a>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Upload</a>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                    </div>
-                                </div>
-                                <h4 class="header-title mb-3">Statistics</h4>
-                                <div class="row text-center">
-                                    <div class="col-sm-4 mb-3">
-                                        <h3 class="font-weight-light">4,335</h3>
-                                        <p class="text-muted text-overflow">Total Sales</p>
-                                    </div>
-                                    <div class="col-sm-4 mb-3">
-                                        <h3 class="font-weight-light">874</h3>
-                                        <p class="text-muted text-overflow">Open Compaign</p>
-                                    </div>
-                                    <div class="col-sm-4 mb-3">
-                                        <h3 class="font-weight-light">2,548</h3>
-                                        <p class="text-muted text-overflow">Total Sales</p>
-                                    </div>
-                                </div>
-                                <div class="chartjs-chart high-performing-product">
-                                    <canvas id="high-performing-product"></canvas>
-                                </div>
-                            </div> <!-- end card-box-->
-                        </div> <!-- end col -->
-
-                        <div class="col-xl-4">
-                            <div class="card-box">
-                                <div class="dropdown float-right">
-                                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">
-                                        <i class="mdi mdi-dots-horizontal"></i>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Settings</a>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Download</a>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Upload</a>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                    </div>
-                                </div>
-                                <h4 class="header-title mb-3">Total Revenue</h4>
-                                <div class="row text-center">
-                                    <div class="col-6 mb-3">
-                                        <h3 class="font-weight-light">8,459</h3>
-                                        <p class="text-muted text-overflow">Total Sales</p>
-                                    </div>
-                                    <div class="col-6 mb-3">
-                                        <h3 class="font-weight-light">584</h3>
-                                        <p class="text-muted text-overflow">Open Compaign</p>
-                                    </div>
-                                </div>
-                                <div class="chartjs-chart conversion-chart">
-                                    <canvas id="conversion-chart"></canvas>
-                                </div>
-                            </div>  <!-- end card-box-->
-                        </div> <!-- end col -->
+        @foreach (var card in cards)
+        {
+            <div class="col m-b-30">
+                <div class="card dashboard-card shadow-sm border-start border-5 border-@card.Color">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div class="me-2">
+                            <h6 class="card-title mb-1">@card.Title</h6>
+                            <p class="card-text fw-bold mb-0">@card.Value.ToString("N0")</p>
+                            <small class="text-muted">Updated just now</small>
+                        </div>
+                        <i class="@card.Icon card-icon fs-2 text-@card.Color"></i>
                     </div>
-                    <!-- end row -->
+                </div>
+            </div>
+        }
+    </div>
 
-                    
-                    <div class="row">
-                        <div class="col-xl-3">
-                            <div class="card-box">
-                                <div class="dropdown float-right">
-                                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">
-                                        <i class="mdi mdi-dots-horizontal"></i>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Settings</a>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Download</a>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Upload</a>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                    </div>
-                                </div>
-                                <h4 class="header-title">My Wallets</h4>
-                                <div class="mb-4 mt-4">
-                                    <h2 class="font-weight-normal mb-2">$6,584.22 <i class="mdi mdi-arrow-up text-success"></i></h2>
-                                    <p class="text-muted">March 26 - April 01</p>
-                                </div>
-
-                                <div class="mb-3 chartjs-chart dash-doughnut">
-                                    <canvas id="doughnut"></canvas>
-                                </div>
-
-                                <div>
-                                    <p><i class="mdi mdi-stop-circle-outline text-success"></i> Wallet Ballance <span class="float-right font-weight-normal">$825.25</span></p>
-                                    <p><i class="mdi mdi-stop-circle-outline text-danger"></i> Travels <span class="float-right font-weight-normal">$1,254</span></p>
-                                    <p class="mb-0"><i class="mdi mdi-stop-circle-outline"></i> Foods & Drinks <span class="float-right font-weight-normal">$89.66</span></p>
-                                </div>
-                            </div> <!-- end card-box -->
-                        </div> <!-- end col -->
-
-                        <div class="col-xl-6">
-                            <div class="card-box">
-                                <div class="dropdown float-right">
-                                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">
-                                        <i class="mdi mdi-dots-horizontal"></i>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Settings</a>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Download</a>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Upload</a>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                    </div>
-                                </div>
-                                <h4 class="header-title mb-3">Transaction History</h4>
-
-                                <div class="table-responsive">
-                                    <table class="table table-centered table-hover mb-0" id="datatable">
-                                        <thead>
-                                            <tr>
-                                                <th class="border-top-0">Name</th>
-                                                <th class="border-top-0">Card</th>
-                                                <th class="border-top-0">Date</th>
-                                                <th class="border-top-0">Amount</th>
-                                                <th class="border-top-0">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <img src="assets/images/users/avatar-2.jpg" alt="user-pic" class="rounded-circle thumb-sm bx-shadow-lg" />
-                                                    <span class="mr-2">Imelda J. Stanberry</span>
-                                                </td>
-                                                <td>
-                                                    <img src="assets/images/cards/visa.png" alt="user-card" height="24" />
-                                                    <span class="mr-2">**** 3256</span>
-                                                </td>
-                                                <td>27.03.2018</td>
-                                                <td>$345.98</td>
-                                                <td><span class="badge badge-pill badge-danger">Failed</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img src="assets/images/users/avatar-3.jpg" alt="user-pic" class="rounded-circle thumb-sm bx-shadow-lg" />
-                                                    <span class="mr-2">Francisca S. Lobb</span>
-                                                </td>
-                                                <td>
-                                                    <img src="assets/images/cards/master.png" alt="user-card" height="24" />
-                                                    <span class="mr-2">**** 8451</span>
-                                                </td>
-                                                <td>28.03.2018</td>
-                                                <td>$1,250</td>
-                                                <td><span class="badge badge-pill badge-success">Paid</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img src="assets/images/users/avatar-1.jpg" alt="user-pic" class="rounded-circle thumb-sm bx-shadow-lg" />
-                                                    <span class="mr-2">James A. Wert</span>
-                                                </td>
-                                                <td>
-                                                    <img src="assets/images/cards/amazon.png" alt="user-card" height="24" />
-                                                    <span class="mr-2">**** 2258</span>
-                                                </td>
-                                                <td>28.03.2018</td>
-                                                <td>$145</td>
-                                                <td><span class="badge badge-pill badge-success">Paid</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img src="assets/images/users/avatar-4.jpg" alt="user-pic" class="rounded-circle thumb-sm bx-shadow-lg" />
-                                                    <span class="mr-2">Dolores J. Pooley</span>
-                                                </td>
-                                                <td>
-                                                    <img src="assets/images/cards/american-express.png" alt="user-card" height="24" />
-                                                    <span class="mr-2">**** 6950</span>
-                                                </td>
-                                                <td>29.03.2018</td>
-                                                <td>$2,005.89</td>
-                                                <td><span class="badge badge-pill badge-danger">Failed</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img src="assets/images/users/avatar-5.jpg" alt="user-pic" class="rounded-circle thumb-sm bx-shadow-lg" />
-                                                    <span class="mr-2">Karen I. McCluskey</span>
-                                                </td>
-                                                <td>
-                                                    <img src="assets/images/cards/discover.png" alt="user-card" height="24" />
-                                                    <span class="mr-2">**** 0021</span>
-                                                </td>
-                                                <td>31.03.2018</td>
-                                                <td>$24.95</td>
-                                                <td><span class="badge badge-pill badge-success">Paid</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img src="assets/images/users/avatar-6.jpg" alt="user-pic" class="rounded-circle thumb-sm bx-shadow-lg" />
-                                                    <span class="mr-2">Kenneth J. Melendez</span>
-                                                </td>
-                                                <td>
-                                                    <img src="assets/images/cards/visa.png" alt="user-card" height="24" />
-                                                    <span class="mr-2">**** 2840</span>
-                                                </td>
-                                                <td>27.03.2018</td>
-                                                <td>$345.98</td>
-                                                <td><span class="badge badge-pill badge-success">Paid</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img src="assets/images/users/avatar-7.jpg" alt="user-pic" class="rounded-circle thumb-sm bx-shadow-lg" />
-                                                    <span class="mr-2">Sandra M. Nicholas</span>
-                                                </td>
-                                                <td>
-                                                    <img src="assets/images/cards/master.png" alt="user-card" height="24" />
-                                                    <span class="mr-2">**** 2015</span>
-                                                </td>
-                                                <td>28.03.2018</td>
-                                                <td>$1,250</td>
-                                                <td><span class="badge badge-pill badge-danger">Failed</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img src="assets/images/users/avatar-8.jpg" alt="user-pic" class="rounded-circle thumb-sm bx-shadow-lg" />
-                                                    <span class="mr-2">Ronald S. Taylor</span>
-                                                </td>
-                                                <td>
-                                                    <img src="assets/images/cards/amazon.png" alt="user-card" height="24" />
-                                                    <span class="mr-2">**** 0325</span>
-                                                </td>
-                                                <td>28.03.2018</td>
-                                                <td>$145</td>
-                                                <td><span class="badge badge-pill badge-success">Paid</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img src="assets/images/users/avatar-9.jpg" alt="user-pic" class="rounded-circle thumb-sm bx-shadow-lg" />
-                                                    <span class="mr-2">Beatrice L. Iacovelli</span>
-                                                </td>
-                                                <td>
-                                                    <img src="assets/images/cards/discover.png" alt="user-card" height="24" />
-                                                    <span class="mr-2">**** 9058</span>
-                                                </td>
-                                                <td>29.03.2018</td>
-                                                <td>$6,542.32</td>
-                                                <td><span class="badge badge-pill badge-success">Paid</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img src="assets/images/users/avatar-10.jpg" alt="user-pic" class="rounded-circle thumb-sm bx-shadow-lg" />
-                                                    <span class="mr-2">Sylvia H. Parker</span>
-                                                </td>
-                                                <td>
-                                                    <img src="assets/images/cards/discover.png" alt="user-card" height="24" />
-                                                    <span class="mr-2">**** 2577</span>
-                                                </td>
-                                                <td>31.03.2018</td>
-                                                <td>$24.95</td>
-                                                <td><span class="badge badge-pill badge-danger">Failed</span></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div> <!-- end table-responsive -->
-
-                            </div> <!-- end card-box-->
-                        </div> <!-- end col-->
-
-                        <div class="col-xl-3">
-                            <div class="card-box gradient-danger bx-shadow-lg">
-                                <h4 class="header-title text-white">Daily Sales</h4>
-                                <p class=" text-white">March 26 - April 01</p>
-                                <div class="mb-3 mt-4">
-                                    <h2 class="font-weight-light  text-white">$3,558.48</h2>
-                                </div>
-
-                                <div class="pull-in margin-m-b-20">
-                                    <canvas id="lineChart" height="122"></canvas>
-                                </div>
-                            </div> <!-- end card-box-->
-
-                            <div class="card-box">
-                                <div class="media">
-                                    <img class="ml-3 rounded-circle bx-shadow-lg" src="assets/images/users/avatar-4.jpg" alt="Generic placeholder image" height="80">
-                                    <div class="media-body">
-                                        <h5 class="mt-0">Louis P. Wheeler</h5>
-                                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, at, tempus viverra turpis.
-                                    </div>
-                                </div>
-                                <a href="" class="btn btn-info btn-block mt-3">Follow</a>
-                            </div> <!-- end card-box-->
-                        </div> <!-- end col -->
+    <!-- Main Content -->
+    <div class="row">
+        <!-- Right Side: Recent Activities -->
+        <div class="col-lg-9 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">چالاکی ئەمڕۆ</h5>
+                </div>
+                <div class="card-body p-0">
+                    <!-- Responsive Table Wrapper -->
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">بەروار</th>
+                                    <th scope="col">جۆر</th>
+                                    <th scope="col">ناو</th>
+                                    <th scope="col">موبایل</th>
+                                    <th scope="col">حاڵەت</th>
+                                    <th scope="col">بڕ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.RecentActivities != null && Model.RecentActivities.Any())
+                                {
+                                    foreach (var activity in Model.RecentActivities)
+                                    {
+                                        <tr>
+                                            <td>@activity.CreatedAt.ToShortDateString()</td>
+                                            <td>@activity.ActivityName</td>
+                                            <td>
+                                                @if (activity.ContactId != 0)
+                                                {
+                                                    <a asp-controller="Contacts"
+                                                       asp-action="ContactBalance"
+                                                       asp-route-contactId="@activity.ContactId"
+                                                       asp-route-startDate="@DateTime.Now.Date.ToString("yyyy-MM-dd")"
+                                                       asp-route-endDate="@DateTime.Now.AddMonths(1).ToString("yyyy-MM-dd")">
+                                                        @activity.ContactName
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    @activity.ContactName
+                                                }
+                                            </td>
+                                            <td><a href="tel:@activity.ContacPhone">@activity.ContacPhone</a></td>
+                                            <td>
+                                                <span class="badge @((activity.Status == "Completed") ? "bg-success" : "bg-warning")">@activity.Status</span>
+                                            </td>
+                                            <td>@activity.Amount.ToString("N0")</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="6" class="text-center">No recent activities found.</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
-                    <!-- end row -->
+                </div>
+            </div>
 
-                    
 
-                    <div class="row">
-                        <div class="col-xl-8">
-                            <div class="card-box">
-                                <div class="dropdown float-right">
-                                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">
-                                        <i class="mdi mdi-dots-horizontal"></i>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Settings</a>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Download</a>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Upload</a>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                    </div>
-                                </div>
-                                <h4 class="header-title mb-4">Visitor Traffics</h4>
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <div id="usa" class="dash-usa-map"></div>
-                                    </div> <!-- end col -->
-                                    <div class="col-md-4">
-                                        <h5 class="mb-1 mt-0">1,12,540 <small class="text-muted mr-2">www.getbootstrap.com</small></h5>
-                                        <div class="progress-w-percent">
-                                            <span class="progress-value font-weight-bold">72% </span>
-                                            <div class="progress progress-sm">
-                                                <div class="progress-bar" role="progressbar" style="width: 72%;" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
+            <!-- Chart for Monthly Totals -->
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">Monthly Sales Totals</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="monthlySalesChart"></canvas>
+                </div>
+            </div>
+        </div>
 
-                                        <h5 class="mb-1 mt-0">51,480 <small class="text-muted mr-2">www.youtube.com</small></h5>
-                                        <div class="progress-w-percent">
-                                            <span class="progress-value font-weight-bold">39% </span>
-                                            <div class="progress progress-sm">
-                                                <div class="progress-bar bg-success" role="progressbar" style="width: 39%;" aria-valuenow="39" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
+        <!-- Left Side: Quick Links and Best Customer -->
+        <div class="col-lg-3 mb-4">
+            <!-- Quick Links -->
+            <div class="card quick-links-card shadow-sm mb-4 border-0">
+                <div class="card-header bg-gradient-primary text-center py-3">
+                    <h5 class="card-title mb-0">Quick Links</h5>
+                </div>
+                <div class="card-body px-3 py-4">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-3">
+                            <a asp-controller="PurchaseInvoices" asp-action="Create" class="quick-link-item">
+                                <i class="fas fa-file-invoice-dollar me-2"></i>کڕینێکی نوێ
+                            </a>
+                        </li>
+                        <li class="mb-3">
+                            <a asp-controller="SaleInvoices" asp-action="Create" class="quick-link-item">
+                                <i class="fas fa-cash-register me-2"></i>فڕۆشتنێکی نوێ
+                            </a>
+                        </li>
+                        <li class="mb-3">
+                            <a asp-controller="ContactPayments" asp-action="Create" class="quick-link-item">
+                                <i class="fas fa-money-check-alt me-2"></i>پارەدان
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="ContactPayments" asp-action="CreateInFlow" class="quick-link-item">
+                                <i class="fas fa-money-check-alt me-2"></i>پارەوەرگرتن
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
-                                        <h5 class="mb-1 mt-0">45,760 <small class="text-muted mr-2">www.dribbble.com</small></h5>
-                                        <div class="progress-w-percent">
-                                            <span class="progress-value font-weight-bold">61% </span>
-                                            <div class="progress progress-sm">
-                                                <div class="progress-bar bg-info" role="progressbar" style="width: 61%;" aria-valuenow="61" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
+            <!-- Best Customer -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">Best Customer</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.BestCustomer != null)
+                    {
+                        foreach (var item in Model.BestCustomer)
+                        {
+                            <h6 class="card-subtitle mb-1">@item.CustomerName</h6>
+                            <p class="card-text">باڵانس: @item.TotalSales.ToString("N0")</p>
+                        }
+                    }
+                    else
+                    {
+                        <p class="card-text">No customer data available.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-                                        <h5 class="mb-1 mt-0">98,512 <small class="text-muted mr-2">www.behance.net</small></h5>
-                                        <div class="progress-w-percent">
-                                            <span class="progress-value font-weight-bold">52% </span>
-                                            <div class="progress progress-sm">
-                                                <div class="progress-bar bg-warning" role="progressbar" style="width: 52%;" aria-valuenow="52" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
+@section Scripts {
+    <script src="~/assets/libs/chart.js/chart.min.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        // Get the data from the model passed to the view (assuming it's named Model)
+        var monthlyTotals = @Html.Raw(Json.Serialize(Model));
 
-                                        <h5 class="mb-1 mt-0">2,154 <small class="text-muted mr-2">www.vimeo.com</small></h5>
-                                        <div class="progress-w-percent">
-                                            <span class="progress-value font-weight-bold">28% </span>
-                                            <div class="progress progress-sm">
-                                                <div class="progress-bar bg-danger" role="progressbar" style="width: 28%;" aria-valuenow="28" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div> <!-- end col -->
-                                </div> <!-- end row-->
-                            </div>  <!-- end card-box-->
-                        </div> <!-- end col -->
+        // Log to check if data is passed correctly
+        console.log(monthlyTotals);
 
-                        <div class="col-xl-4">
-                            <div class="card-box">
-                                <div class="dropdown float-right">
-                                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">
-                                        <i class="mdi mdi-dots-horizontal"></i>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Settings</a>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Download</a>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Upload</a>
-                                        <!-- item-->
-                                        <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                    </div>
-                                </div>
-                                <h4 class="header-title mb-4">Data Uses</h4>
+        // Map the data to two arrays: sales data and month names
+        var monthlySales = monthlyTotals.map(item => item.TotalAmount);
+        var months = monthlyTotals.map(item => item.Month);
 
-                                <div class="row text-center">
-                                    <div class="col-6 mb-3">
-                                        <h3 class="font-weight-light"> <i class="mdi mdi-cloud-download text-info"></i> 79%</h3>
-                                        <p class="text-muted text-overflow">Downloads</p>
-                                    </div> <!-- end col -->
-                                    <div class="col-6 mb-3">
-                                        <h3 class="font-weight-light"> <i class="mdi mdi-cloud-upload text-danger"></i> 23%</h3>
-                                        <p class="text-muted text-overflow">Uploads</p>
-                                    </div> <!-- end col -->
-                                </div> <!-- end row-->
+        // Check that the arrays are populated correctly
+        console.log(monthlySales, months);
 
-                                <div class="chartjs-chart datauses-area">
-                                    <canvas id="datauses-area-1"></canvas>
-                                </div>
-                            </div> <!-- end card-box-->
-                        </div> <!-- end col-->
+        // Get the canvas element by its ID and get the context for Chart.js
+        var ctx = document.getElementById('monthlySalesChart').getContext('2d');
 
-                    </div>
-                    <!-- end row -->
+        // Initialize the Chart.js chart
+        new Chart(ctx, {
+            type: 'line',  // Chart type: line chart
+            data: {
+                labels: months,  // X-axis: months
+                datasets: [{
+                    label: 'Monthly Sales Totals',  // Label for the dataset
+                    data: monthlySales,  // Y-axis: sales data
+                    borderColor: 'rgba(75, 192, 192, 1)',  // Line color
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',  // Fill color
+                    borderWidth: 2,  // Border width of the line
+                    tension: 0.4  // Smoothness of the line curve
+                }]
+            },
+            options: {
+                responsive: true,  // Make the chart responsive
+                maintainAspectRatio: false,  // Allow resizing of the chart
+                scales: {
+                    y: {
+                        beginAtZero: true,  // Start Y-axis from 0
+                        grid: {
+                            color: 'rgba(200, 200, 200, 0.2)'  // Y-axis grid color
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(200, 200, 200, 0.2)'  // X-axis grid color
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        enabled: true  // Enable tooltips on hover
+                    }
+                }
+            }
+        });
+    </script>
+
+
+}
+
+<style>
+    .dashboard-card {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s;
+    }
+
+        .dashboard-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+    .card-icon {
+        font-size: 2rem;
+    }
+
+    .quick-link-item {
+        display: flex;
+        align-items: center;
+        color: #4a4a4a;
+        transition: all 0.3s ease;
+        border-radius: 6px;
+        text-decoration: none;
+    }
+
+        .quick-link-item i {
+            color: #007bff;
+            transition: color 0.3s ease;
+            margin-left:15px;
+        }
+
+        .quick-link-item:hover {
+            text-decoration: none;
+            color: #007bff;
+        }
+</style>
