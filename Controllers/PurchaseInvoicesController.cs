@@ -369,9 +369,6 @@ namespace ERManager.Controllers
             return _context.PurchaseInvoices.Any(e => e.Id == id);
         }
 
-
-
-
         [HttpPost]
         public IActionResult AddItem(int InvoiceId, int NewProductId, double NewProductQuantity, double NewProductUnitPrice)
         {
@@ -796,5 +793,16 @@ namespace ERManager.Controllers
             return View(filteredInvoices);
         }
 
+        // Change this attribute to [HttpGet]
+        [HttpGet]
+        public IActionResult SaleInvoiceEdit(int id)
+        {
+            var saleInvoiceItem = _context.SaleInvoiceItem.FirstOrDefault(d => d.Id == id);
+            if (saleInvoiceItem == null)
+            {
+                return NotFound();
+            }
+            return RedirectToAction("Edit", "SaleInvoices", new { id = saleInvoiceItem.SaleInvoiceId });
+        }
     }
 }

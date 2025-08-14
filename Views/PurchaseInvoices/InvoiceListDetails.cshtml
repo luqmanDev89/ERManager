@@ -154,6 +154,7 @@
                                 <th>کۆ</th>
                                 <th>گومرك</th>
                                 <th>بەروار</th>
+                                <th>کۆی فڕۆشیار</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -187,6 +188,18 @@
                                         <td>@item.LineTotal.ToString("N2")</td>
                                         <td class="editable" data-field="TaxPresent" contenteditable="true">@item.TaxPresent.ToString("N2")</td>
                                         <td>@Invoices.CreatedAt.Value.ToString("yyyy-MM-dd")</td>
+                                        <td>
+                                            <a asp-controller="SaleInvoices" asp-action="SaleInvoiceEdit" asp-route-Id="@item.SaleInvoiceItemId">
+                                                @if (string.IsNullOrEmpty(item.ContactName))
+                                                {
+                                                    @item.SaleInvoiceItemId
+                                                }
+                                                else
+                                                {
+                                                    @item.ContactName
+                                                }
+                                            </a>
+                                        </td>
                                         <td>
                                             <button class="btn btn-danger btn-sm" onclick="confirmDelete(@item.Id)"><i class="fas fa-trash"></i></button>
                                             <button class="btn btn-warning btn-sm @(item.ContactPaymentId.HasValue ? "d-none" : "")" onclick="markAsPaid(@item.Id)">

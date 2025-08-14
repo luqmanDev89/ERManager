@@ -371,7 +371,7 @@ namespace ERManager.Controllers
                 UnitPrice = NewProductUnitPrice,
                 UnitBuyPrice = NewProductUnitBuyPrice == 0 ? NewProductUnitPrice : NewProductUnitBuyPrice,
                 TaxPresent = NewTaxPresent
-              
+
 
             };
             if (NewContactId != 0)
@@ -540,7 +540,7 @@ namespace ERManager.Controllers
                 .Include(d => d.SaleInvoiceItems)
                     .ThenInclude(item => item.Product)
                         .ThenInclude(product => product.ProductCategory)
-                .Where(item => 
+                .Where(item =>
                             item.CreatedAt.Value.Date >= startDate.Value.Date &&
                             item.CreatedAt.Value.Date <= endDate.Value.Date)
                 .AsQueryable();
@@ -858,8 +858,11 @@ namespace ERManager.Controllers
                         Product = i.Product,
                         Quantity = i.Quantity,
                         UnitPrice = i.UnitBuyPrice,
-                        TaxPresent=i.TaxPresent,
-                        IsPaid=false
+                        TaxPresent = i.TaxPresent,
+                        IsPaid = false,
+                        SaleInvoiceItemId = i.Id,
+                        ContactName = firstItem.Contact?.Name ?? string.Empty // Ensure ContactName is set
+
                     }).ToList()
                 };
 
@@ -909,6 +912,8 @@ namespace ERManager.Controllers
         {
             // Use AsNoTracking to avoid unnecessary entity tracking when data is not modified
             var SaleInvoiceItems = await _context.SaleInvoiceItem
+                .Include(d => d.SaleInvoice)
+                .ThenInclude(d => d.Contact)
                 .Include(d => d.Product)
                 .Include(d => d.Contact)
                 .Where(d => d.SaleInvoiceId == SaleInvoiceId && d.ContactId != null && d.IsAddedToPurchase == false)
@@ -944,8 +949,10 @@ namespace ERManager.Controllers
                         Quantity = i.Quantity,
                         UnitPrice = i.UnitBuyPrice,
                         TaxPresent = i.TaxPresent,
-                        IsPaid=false,
-                        
+                        IsPaid = false,
+                        SaleInvoiceItemId = i.Id,
+                        ContactName = i.SaleInvoice.Contact.Name ?? string.Empty // Ensure ContactName is set
+
                     }).ToList()
                 };
 
@@ -973,5 +980,18 @@ namespace ERManager.Controllers
             return RedirectToAction(nameof(SaleInvoiceItems), new { SaleInvoiceId });
         }
 
+        [HttpPost]
+        //Open Redicerto To Control "SaleInvoice" Action "Edit"
+        [HttpGet] // Change from [HttpPost]
+        public IActionResult SaleInvoiceEdit(int id)
+        {
+            var saleInvoiceItem = _context.SaleInvoiceItem.FirstOrDefault(d => d.Id == id);
+            if (saleInvoiceItem == null)
+            {
+                return NotFound(); // Or handle the error appropriately
+            }
+            // Correctly redirects to the Edit action
+            return RedirectToAction("Edit", "SaleInvoices", new { id = saleInvoiceItem.SaleInvoiceId });
+        }
     }
 }

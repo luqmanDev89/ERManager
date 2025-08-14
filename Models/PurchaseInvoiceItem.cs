@@ -45,8 +45,8 @@ namespace ERManager.Models
         [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public double LineTotal => (Quantity * UnitPrice) * (1 + (TaxPresent / 100));
 
-
-       
+        public int SaleInvoiceItemId { get; set; } = 0;
+        public string ContactName { get; set; } = string.Empty;
     }
 
 }

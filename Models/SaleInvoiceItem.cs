@@ -59,5 +59,7 @@ namespace ERManager.Models
 
         [DisplayName("قازانج")]
         public double Profit => LineTotal - (LineBuyTotal + ((Quantity * UnitPrice) * (1 + (TaxPresent / 100))) - ((Quantity * UnitPrice)));
+
+        public int PurchaseItemId { get; set; } = 0; // Foreign key to PurchaseItem if applicable
     }
 }

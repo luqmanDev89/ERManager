@@ -410,6 +410,10 @@ namespace ERManager.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ContactName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<int?>("ContactPaymentId")
                         .HasColumnType("INTEGER");
 
@@ -424,6 +428,9 @@ namespace ERManager.Migrations
 
                     b.Property<double>("Quantity")
                         .HasColumnType("REAL");
+
+                    b.Property<int>("SaleInvoiceItemId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<double>("TaxPresent")
                         .HasColumnType("REAL");
@@ -516,6 +523,9 @@ namespace ERManager.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PurchaseItemId")
                         .HasColumnType("INTEGER");
 
                     b.Property<double>("Quantity")
