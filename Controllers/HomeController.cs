@@ -4,6 +4,7 @@ using ERManager.ViewModels.Homes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -183,8 +184,7 @@ namespace ERManager.Controllers
         }
 
         [HttpGet]
-        [HttpGet]
-        public async Task<IActionResult> BackupDatabase()
+        public async Task<IActionResult> BackupDatabase1()
         {
             try
             {
@@ -260,6 +260,47 @@ namespace ERManager.Controllers
             }
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> BackupDatabase()
+        {
+            try
+            {
+                // Get database path and backup folder from configuration
+                string dbPath = _configuration.GetConnectionString("ERManagerContext")?.Replace("Data Source=", "").Trim();
+                string backupFolder = _configuration["DatabaseSettings:BackupFolder"];
+
+                if (string.IsNullOrEmpty(dbPath) || string.IsNullOrEmpty(backupFolder))
+                    return BadRequest("Database or backup folder not configured.");
+
+                if (!System.IO.File.Exists(dbPath))
+                    return BadRequest("Database file not found.");
+
+                // Use absolute path on Linux or relative path within app
+                string backupFolderPath = Path.Combine(Directory.GetCurrentDirectory(), backupFolder);
+                Directory.CreateDirectory(backupFolderPath); // creates folder if it doesn't exist
+
+                // Generate backup filename
+                string backupFileName = $"backup_{DateTime.Now:yyyyMMddHHmmss}.db";
+                string backupFilePath = Path.Combine(backupFolderPath, backupFileName);
+
+                // Perform SQLite backup
+                using (var source = new SqliteConnection($"Data Source={dbPath}"))
+                using (var destination = new SqliteConnection($"Data Source={backupFilePath}"))
+                {
+                    await source.OpenAsync();
+                    await destination.OpenAsync();
+                    source.BackupDatabase(destination);
+                }
+
+                // Return the backup file to the client
+                return PhysicalFile(backupFilePath, "application/octet-stream", backupFileName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+            }
+        }
 
         [HttpGet]
         public async Task<IActionResult> RestoreDatabase(IFormFile backupFile)
